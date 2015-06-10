@@ -15,9 +15,9 @@ tcoffee_cline()
 #read in the alignment file
 alignment = AlignIO.read(open("aligned.aln"), "clustal")
 #print results to standard output, this part will be removed in real program
-#print "Alignment length %i" % alignment.get_alignment_length()
-#for record in alignment :
-#   print record.seq, record.id
+print "Alignment length %i" % alignment.get_alignment_length()
+for record in alignment :
+	print record.seq, record.id
 
 #calculate Shannon entropy scores (from https://github.com/ffrancis/Multiple-sequence-alignment-Shannon-s-entropy/blob/master/msa_shannon_entropy012915.py)
 # Add an import path to BioPython
@@ -78,9 +78,20 @@ scores = shannon_entropy_list_msa(alignment)
 f = open("entropyScores.txt","w")
 f.write("position score\n")
 for x in range(len(scores)):
-	f.write("%d %f"%(x,scores[x]))
+	f.write("%d %f"%((x+1),scores[x]))
 	if (x < len(scores)-1):
 		f.write("\n")
 f.close()
+
+#for tomorrow... work on trim section. First, make loop to run each a one on one alignment
+#on each sequence in the fasta file against the sequence from the pdb file. calculate entropy
+#scores but instead of saving to a file, find the total score (as opposed to each acid's score)
+#If there is a sequence with a perfect score (score = AA length of the pdb sequence), then 
+#that sequence is used as a template in the alignment all dashes are deleted, along with anything in the
+#'column' beneath them. Then this new alignment is used for the final entropy calculations that are saved
+#to the txt file. If there is no perfect match, add the PDB file sequence to the fasta file, then redo the alignment,
+#then repeat the above process (the new sequence will obciously be flagged as the template. dont do this
+#automatically though as it slightly skews the final entropy score results.) Be sure to fully
+#explain and document this process and the logic behind it, so users can decide if the bias it introduced is acceptable.
 
 print "done"
