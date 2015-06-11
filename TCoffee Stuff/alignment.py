@@ -4,41 +4,15 @@ from Bio import Align
 from Bio.Align import Applications
 from Bio.Align.Applications import _TCoffee
 from Bio.Align.Applications import TCoffeeCommandline
-
-#creates command line wrapper
-tcoffee_cline = TCoffeeCommandline(infile="uniprot-ornithine+transcarbamylase-2.fasta",
-                                   output="clustalw",
-                                   outfile="aligned.aln")
-#executes command line wrapper
-tcoffee_cline()
-
-#read in the alignment file
-alignment = AlignIO.read(open("aligned.aln"), "clustal")
-#print results to standard output, this part will be removed in real program
-print "Alignment length %i" % alignment.get_alignment_length()
-for record in alignment :
-	print record.seq, record.id
-
-#calculate Shannon entropy scores (from https://github.com/ffrancis/Multiple-sequence-alignment-Shannon-s-entropy/blob/master/msa_shannon_entropy012915.py)
-# Add an import path to BioPython
-import sys
-sys.path.append("~/Desktop/Softwares/biopython-1.65/Bio/")
-
-# import pandas for data frame
-import pandas as pd
-from numpy.random import randn
-
-###################################################################
-## Error message if the lengths of the sequences in MSA are not the same
-###################################################################
-seq_lengths_list = []
-for record in alignment:
-    seq_lengths_list.append(len(record))
-row_num = len(seq_lengths_list)                                            # Get number of rows in the MSA
-seq_lengths = set(seq_lengths_list)                                         # Get unique lengths of the sequences aligned in the MSA
-if len(seq_lengths) != 1:
-    print "Check you input Alignment!",                                     # Error message if the lengths of the sequences in MSA are not the same
-
+import Bio.PDB
+from Bio.PDB.PDBParser import PDBParser
+from Bio.PDB import *
+from Bio import SeqIO
+from Bio.PDB.Polypeptide import three_to_one
+#Function definitions
+def deleteContent(pfile):
+    pfile.seek(0)
+    pfile.truncate()
 ##################################################################
 # Function to calcuate the Shannon's entropy per alignment column
 # H=-\sum_{i=1}^{M} P_i\,log_2\,P_i (http://imed.med.ucm.es/Tools/svs_help.html)
@@ -70,9 +44,109 @@ def shannon_entropy_list_msa(alignment_file):
         shannon_entropy_list.append(shannon_entropy(list_input))
     return shannon_entropy_list
 
-scores = shannon_entropy_list_msa(alignment)
+#START ACTUAL PROGRAM
 
-#trim?????
+############################################
+#find match
+############################################
+#read in .pdb sequence
+parser = PDBParser()
+structure = parser.get_structure('', '1OTH.pdb')
+header = parser.get_header()
+trailer = parser.get_trailer()
+pdbSequence = ''
+for residue in structure[0]['A'].get_residues():
+    if (residue.get_id()[0]==' '):
+        residueName = three_to_one(residue.get_resname())
+        pdbSequence += residueName
+#check each fasta sequence for match to pdb sequence
+bestMatch = ''
+bestScore = 0
+handle = open("uniprot-ornithine+transcarbamylase-2.fasta", "rU")
+for record in SeqIO.parse(handle, "fasta") :
+    foundMatch = False
+    if foundMatch == False:
+        tempFile = open("temp.fasta", "w")
+        deleteContent(tempFile)
+        tempFile.write(">sp|000000|FAKE HEADER OS=Fakus Faky GN=FAK PE=0 SV=0\n")
+        tempFile.write(pdbSequence + "\n")
+        tempFile.write(">sp|%s|FAKE HEADER OS=Fakus Faky GN=FAK PE=0 SV=0\n"%(record.name))
+        for x in record.seq:
+            tempFile.write(x)
+        tempFile.write("\n")
+        tempFile.close()
+        cline = TCoffeeCommandline(infile="temp.fasta",
+                                       output="clustalw",
+                                       outfile="temp.aln")
+        cline()
+        tempAlignment = AlignIO.read(open("temp.aln"), "clustal")
+        scores = shannon_entropy_list_msa(tempAlignment)
+        matchScore = 0
+        for num in scores:
+            matchScore += num
+        if matchScore >= bestScore:
+            bestScore = matchScore
+            bestMatch = record
+        if matchScore == len(pdbSequence):
+            foundMatch = True
+            print "%s is a match"%(record.name)
+handle.close()
+
+#Do alignment
+#creates command line wrapper
+tcoffee_cline = TCoffeeCommandline(infile="uniprot-ornithine+transcarbamylase-2.fasta",
+                                   output="clustalw",
+                                   outfile="aligned.aln")
+#executes command line wrapper
+tcoffee_cline()
+#read in the alignment file
+alignment = AlignIO.read(open("aligned.aln"), "clustal")
+#print results to standard output, this part will be removed in real program
+print "Alignment length %i" % alignment.get_alignment_length()
+#for record in alignment :
+#	print record.seq, record.id
+
+#Trim alignment
+bestMatchPos = 0
+i = 0
+for record in alignment:
+    if record.id == bestMatch.id:
+        bestMatchPos = i
+    i += 1
+
+limit = alignment.get_alignment_length()
+i = 0
+while i < limit:
+    if alignment[bestMatchPos][i] == '-':
+        alignment = alignment[:,:i]+alignment[:,i+1:]
+        limit -= 1
+        print "Edited Alignment length %i" % alignment.get_alignment_length()
+    if i < limit:
+        if alignment[bestMatchPos][i] != '-':
+            i += 1
+
+#calculate Shannon entropy scores (from https://github.com/ffrancis/Multiple-sequence-alignment-Shannon-s-entropy/blob/master/msa_shannon_entropy012915.py)
+# Add an import path to BioPython
+import sys
+sys.path.append("~/Desktop/Softwares/biopython-1.65/Bio/")
+
+# import pandas for data frame
+import pandas as pd
+from numpy.random import randn
+
+###################################################################
+## Error message if the lengths of the sequences in MSA are not the same
+###################################################################
+seq_lengths_list = []
+for record in alignment:
+    seq_lengths_list.append(len(record))
+row_num = len(seq_lengths_list)                                            # Get number of rows in the MSA
+seq_lengths = set(seq_lengths_list)                                         # Get unique lengths of the sequences aligned in the MSA
+if len(seq_lengths) != 1:
+    print "Check you input Alignment!",                                     # Error message if the lengths of the sequences in MSA are not the same
+
+
+scores = shannon_entropy_list_msa(alignment)
 
 #write scores to .txt file
 f = open("entropyScores.txt","w")
@@ -83,15 +157,6 @@ for x in range(len(scores)):
 		f.write("\n")
 f.close()
 
-#for tomorrow... work on trim section. First, make loop to run each a one on one alignment
-#on each sequence in the fasta file against the sequence from the pdb file. calculate entropy
-#scores but instead of saving to a file, find the total score (as opposed to each acid's score)
-#If there is a sequence with a perfect score (score = AA length of the pdb sequence), then 
-#that sequence is used as a template in the alignment all dashes are deleted, along with anything in the
-#'column' beneath them. Then this new alignment is used for the final entropy calculations that are saved
-#to the txt file. If there is no perfect match, add the PDB file sequence to the fasta file, then redo the alignment,
-#then repeat the above process (the new sequence will obciously be flagged as the template. dont do this
-#automatically though as it slightly skews the final entropy score results.) Be sure to fully
-#explain and document this process and the logic behind it, so users can decide if the bias it introduced is acceptable.
+
 
 print "done"

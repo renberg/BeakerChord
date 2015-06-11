@@ -1,0 +1,36 @@
+CLUSTAL W (1.83) multiple sequence alignment
+
+sp|000000|FAKE                  -----------------------------------KVQLKGRDLLTLKNF
+sp|tr|Q9IAV0|Q9IAV0_SCEUN|FAKE  MLFNFRSLFSTRNVNKISKHLVQRIRYRHGPPSETPVQLKGRDLLTLQNF
+                                                                    ***********:**
+
+sp|000000|FAKE                  TGEEIKYMLWLSADLKFRIKQKGEYLPLLQGKSLGMIFEKRSTRTRLSTE
+sp|tr|Q9IAV0|Q9IAV0_SCEUN|FAKE  SAEEIKYLLWVSADLKERIKHRGEYLPLLQGKSLATIFEKRSTRTRLSTE
+                                :.*****:**:***** ***::************. **************
+
+sp|000000|FAKE                  TGFALLGGHPCFLTTQDIHLGVNESLTDTARVLSSMADAVLARVYKQSDL
+sp|tr|Q9IAV0|Q9IAV0_SCEUN|FAKE  TGFALLGGHPCFLTAEDIHLGINENITDTARVLSTMTDAILARVCKHHDL
+                                **************::*****:**.:********:*:**:**** *: **
+
+sp|000000|FAKE                  DTLAKEASIPIINGLSDLYHPIQILADYLTLQEHYSSLKGLTLSWIGDGN
+sp|tr|Q9IAV0|Q9IAV0_SCEUN|FAKE  ELLAKEALIPVINGLSDSEHPIQILADYLTLQEHYGSLNGLTLCWIGDGN
+                                : ***** **:******  ****************.**:****.******
+
+sp|000000|FAKE                  NILHSIMMSAAKFGMHLQAATPKGYEPDASVTKLAEQYAKENGTKLLLTN
+sp|tr|Q9IAV0|Q9IAV0_SCEUN|FAKE  NVLNSIMLSAAKFGMNLHIAIPKGFEPDTMVTKTAEEYSIKYCTRLFRTT
+                                *:*:***:*******:*: * ***:***: *** **:*: :  *:*: *.
+
+sp|000000|FAKE                  DPLEAAHGGNVLITDTWISMGREEEKKKRLQAFQGYQVTMKTAKVAASDW
+sp|tr|Q9IAV0|Q9IAV0_SCEUN|FAKE  NPLEAARGANVLITDTWISMGQEEEKQARLKAFQDYQITMQIGKVAAPGW
+                                :*****:*.************:****: **:***.**:**: .****..*
+
+sp|000000|FAKE                  TFLHCLPRKPEEVDDEVFYSPRSLVFPEAENRKWTIMAVMVSLLTDYSPQ
+sp|tr|Q9IAV0|Q9IAV0_SCEUN|FAKE  TFLHCLPRKPQEVDDEVFYSPQSLVFQEAENRKWTIMAVMVSLLSDYSPQ
+                                **********:**********:**** *****************:*****
+
+sp|000000|FAKE                  LQKPKF
+sp|tr|Q9IAV0|Q9IAV0_SCEUN|FAKE  MQKPTF
+                                :***.*
+
+
+
