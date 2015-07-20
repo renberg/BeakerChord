@@ -1,0 +1,1944 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="Author" content="Aaron Renberg">
+<!-- modified by Aaron Renberg from David Marcey's
+  Template for building web pages with Jmol
+	by Angel Herr�ez; version 2007.04.24 (based on v.0.7a)
+	
+	Available from  http://biomodel.uah.es/Jmol/  and  http://wiki.jmol.org/
+
+	Use according to Creative Commons "Attribution-ShareAlike" License, 
+	http://creativecommons.org/licenses/by-sa/3.0/
+-->
+<title>Jsmol window</title>
+<style type="text/css">
+/* These are important, don't change: */
+html, body { height:100%; overflow:hidden; margin:0; padding:0; }
+.JmolPanels { position:absolute; overflow:hidden; }
+.textPanels { position:absolute; overflow:auto; }
+/* Don't add margin nor padding to textPane; if needed, use an inner div with desired style (like 'contents' below) */
+
+/* These are aesthetic, can be customized: */
+.content { padding:0.5em 1ex; }
+.textPanels, .JmolPanels { background-color:#eeeeee; }  /* later, same applied to applet */
+.style1 {
+	font-family: Arial, Helvetica, sans-serif, Symbol;
+	font-size: large;
+}
+a:link {
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+a:active {
+	text-decoration: none;
+}
+.center {	text-align: center;
+}
+</style>
+<script type="text/javascript">
+//  	USER'S SETTINGS: 
+	var side = "left"	// sets the side of the page that the model appears on,�you can set this to "left" or "right"
+	var w = 60			// you can set this to any integer, meaning percent of window width assigned to Jmol
+	var JmolPath = "/Users/aaronrenberg/BeakerChord/JmolStuff/jmol-14.2.14_2015.06.11/jsmol/"	// adjust according to your location of the Jmol applet files
+							// (Jmol.js, JmolApplet0.jar and the others) 
+							// If you place them in the same directory as this file, use "./"
+//      --------------
+
+document.writeln('<script src="' + JmolPath + 'Jmol.js" type="text/javascript"><' + '/script>')
+var cssTx = '<style type="text/css">'
+	cssTx += '#JmolPane { left:' + ( (side=="left") ? "0px" : ((100-w)+"%") ) + '; width:' + w + '%; top:0px; height:100%; } '	
+	cssTx += '#mainPane { left:' + ( (side=="left") ? (w+"%") : "0px" ) + '; width:' + (100-w) + '%; top:0px; height:100%;} '
+	cssTx += '</style>'
+document.writeln(cssTx)
+</script>
+<script type="text/javascript">
+Jmol._alertNoBinary = false;
+jmolApplet0 = Jmol.getApplet("jmolApplet0", Info);
+</script>
+
+</head>
+
+<body link="#0066FF">
+<div id="JmolPane" class="JmolPanels">
+<script type="text/javascript">
+	jmolInitialize(JmolPath, "JmolAppletSigned0.jar")
+	jmolSetAppletColor("#ffffff")	//same as page; you could choose another if you prefer
+	jmolApplet("100%", 'background [xffffff]; set platformspeed 2; load bdna2.pdb; set antialiasdisplay true; set frank off; select all; hbonds off; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; move 180 0 0 0 0 0 0 0 .1; move -50 -85.60 -60 15 0 0 0 0 .5; select all; color cpk; wireframe 30; select hoh; wireframe off; spacefill off; delay 1; move 0 360 0 0 0 0 0 0 6;')		// DO NOT change 100% 
+		// of course, you should change the script to load your model or run your script
+</script>
+</div>
+<div id="mainPane" class="textPanels">
+	<div class="content">
+
+      <table width="100%" border="0" align="center" cellpadding="10">
+        
+      <tr> 
+        <td height="10429"><p align="center"><a href="../exhibits.htm" target="_parent">Back 
+            to OMM Exhibits</a></p>
+          <table width="100%" border="1" align="center" cellpadding="10">
+            <tr> 
+              <td height=""><h1 align="center"><font size="5" face="Arial, Helvetica, sans-serif"><a name="top" id="top"></a></font><font color="#000000" size="4" face="Arial, Helvetica, sans-serif">An 
+                  Introduction to <a href="http://jmol.sourceforge.net/" target="_blank">Jmol</a>* 
+                  Scripting**</font><font color="#000000"><br />
+                  <font size="2" face="Arial, Helvetica, sans-serif"> Nathan Silva 
+                  and David Marcey<br />
+                  &copy; 2007</font></font></h1>
+                <p align="center"><font color="#000000" size="4" face="Arial, Helvetica, sans-serif"><font color="#000000" size="4" face="Arial, Helvetica, sans-serif"><font color="#9900FF" size="3">*******</font></font> 
+                  <font color="#9900FF" size="3">updated 11/07 *******</font></font></p>
+                <p align="center"><font size="4" face="Arial, Helvetica, sans-serif"><strong><b><a href="#intro"><font size="3">I. 
+                  Introduction</font></a><font color="#0000FF" size="3"><br />
+                  <a href="#II">II. Display</a><br />
+                  <a href="#iii" target="_self">III. Loading and Positioning</a><br />
+                  <a href="#IV">IV. Selecting and Labeling</a><br />
+                  <a href="#V">V. Coloring and Schemes</a><br />
+                  <a href="#VI">VI. Illustrating Bonds</a></font></b><font color="#0000FF" size="3"><br />
+                  <b><a href="#VII">VII. Animation</a></b></font></strong></font></p>
+                <p align="center"><font size="4" face="Arial, Helvetica, sans-serif"><strong><a href="../surfaces/surfaces.htm">Separate 
+                  Page: Constructing Jmol Surfaces <br />
+                  </a> </strong></font></p>
+                <p align="left"><font color="#9900FF" size="3" face="Arial, Helvetica, sans-serif"><strong>Note: 
+                  if this tutorial is helpful in the creation of your own webpages, 
+                  please explicitly acknowledge this in your work (e.g. URL, Author, 
+                  and, ideally, a link to this page). And please 
+                  drop an email to <a href="mailto:marcey@clunet.edu">marcey@clunet.edu</a> 
+                  with a link to your page/s. This helps with funding opportunities 
+                  for the OMM and helps ensure continued development of this resource. 
+                  Thanks!</strong></font></p>
+                <p align="center"><font size="4" face="Arial, Helvetica, sans-serif"><strong><font size="2"><br />
+                  </font> </strong></font><font size="2" face="Arial, Helvetica, sans-serif"><strong>Directions</strong></font></p>
+                <p align="left"><font size="2" face="Arial, Helvetica, sans-serif">Note: surfaces require a lot of memory and are slow to load. This is especially true now that we are using JSmol and HTML5 instead of the java-based Jmol. If you get an unresponsive script, please choose continue. you may need to do this several times, depending on the script.</font></p>
+                <p align="left"><img src="../script_error.jpg" alt="" width="282" height="125" align="absmiddle" class="center"></p>
+<p align="center">&nbsp;</p>
+                <p align="left"><font size="2" face="Arial, Helvetica, sans-serif"> 
+                  This exhibit displays molecules in the left part of the screen, 
+                  and text that addresses structure-function relationships of 
+                  the molecules in the right part (below). Use the scrollbar to 
+                  the right to scroll through the text of this exhibit. <br />
+                  </font><font size="2" face="Arial, Helvetica, sans-serif"><br />
+                  To evoke renderings of the molecule that illustrate particular 
+                  points, click the radio buttons: 
+                  <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;select all", "", false );
+</script>
+                </font></p>
+                <p align="left"><font size="2" face="Arial, Helvetica, sans-serif">* 
+                  <font size="1">Chime users, please see<a href="../scripting_ch/molmast.htm"> An 
+                  Introduction to Chime Scripting</a>.</font></font></p>
+                <p align="left"><font size="2" face="Arial, Helvetica, sans-serif">** 
+                  <font size="1">For a comprehensive list of Jmol commands, see 
+                  the <a href="http://chemapps.stolaf.edu/jmol/" target="_blank">Jmol 
+                  Interactive Scripting Doc</a>.</font></font></p></td>
+            </tr>
+          </table>
+          <font size="4" face="Arial, Helvetica, sans-serif"><a name="intro" id="intro"></a></font> 
+          <hr /> <hr /> <h4><font color="#000000" size="4" face="Arial, Helvetica, sans-serif"><b>I. 
+            Introduction</b> </font></h4>
+          <p><font size="2" face="Arial, Helvetica, sans-serif">Jmol, a Java applet 
+            used to view molecules in web pages, can read scripts that are contained 
+            in Jmol buttons. These scripts are used to change the rendering of 
+            the molecule to illustrate important structural features. </font></p>
+          <p><font size="2" face="Arial, Helvetica, sans-serif">This exhibit provides 
+            example Jmol scripts that can be copied and pasted into the javascript 
+            tags for buttons. Each section starts with a discussion of the uses 
+            of various renderings and ends with a table that includes a list of 
+            buttons (left column - 
+            <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;select all", "", false );
+            </script>
+            ) containing sample scripts (right column). These evoke particular 
+            renderings of the molecules displayed in the left frame. If you are 
+            new to Jmol scripting, it is suggested that you spend time going through 
+            the exhibit in its entirety, reading the scripts to see how they can 
+            be employed in your own web pages.</font></p>
+          <p align="center"><a href="#top" target="_self"><font size="4" face="Arial, Helvetica, sans-serif">return 
+            to beginning of the exhibit</font></a> <font size="4" face="Arial, Helvetica, sans-serif"><a href="#intro" target="_self"><a name="II" id="II"></a></a></font></p>
+          <p align="center"><font size="4" face="Arial, Helvetica, sans-serif"><a href="#intro" target="_self"><font color="#0000FF" size="1">[Introduction]</font></a><font color="#0000FF" size="1"> 
+            <a href="#II">[II. Display]</a> <a href="#iii" target="_self">[III. 
+            Loading and Positioning]</a> <a href="#IV">[IV. Selecting and Labeling]</a> 
+            <a href="#V"><br />
+            [V. Coloring and Schemes]</a> <a href="#VI">[VI. Illustrating Bonds]</a> 
+            <a href="#VII">[VII. Animation]</a></font></font></p>
+          <hr /> <hr /> <h1><font size="4" face="Arial, Helvetica, sans-serif">II. 
+            Display</font></h1>
+          <p><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">Jmol</font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+            uses two different units of measurement that can be used with display 
+            commands. One is the standard, atomic-resolution unit, the Angstrom 
+            (&Aring;); 1 &Aring; = 10<sup>-10</sup> meters. Chime also uses a 
+            novel unit, the RasMol unit; 1 RasMol unit = 1/250 &Aring;. The display 
+            codes (see below) can be modified to specify dimensions in either 
+            RasMol units or Angstroms by adding a numerical value after the name 
+            of a command.</font> <font face="Arial, Helvetica, sans-serif" size="2" color="#000000"> 
+            Angstroms are indicated by a decimal in the numerical value and RasMol 
+            units are used as a default when no decimals are employed. For example, 
+            a 'wireframe 125' script specifies a wireframe display in 125 RasMol 
+            Units. This is equivalent to the script &quot;wireframe 0.5&quot; 
+            (0.5 &Aring;). </font></p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2" color="#000000">The 
+            default display for most pdbs is wireframe, as shown at left. Wireframe 
+            is very useful because it clearly shows the covalent bonds (except 
+            S-S bonds) between all atoms of a molecule.</font></p>
+          <p><font size="2" face="Arial, Helvetica, sans-serif"> 
+            <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit; zap;load bdna2.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; move 180 0 0 0 0 0 0 0 .1; move -50 -85.60 -60 15 0 0 0 0 .5;  select all;  color cpk; wireframe; delay 1; wireframe 20; delay 1; wireframe 40; delay 1; wireframe 60; delay 1; wireframe 80; delay 1; wireframe 100; select hoh; wireframe off; spacefill off;', "", false );
+        </script>
+            </font><font face="Arial, Helvetica, sans-serif" size="2" color="#000000">Varying 
+            the thickness of wireframe displays can provide useful alternatives 
+            in illustrating points. </font></p>
+          <p> <font size="2" face="Arial, Helvetica, sans-serif"> 
+            <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load bdna2.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; move 180 0 0 0 0 0 0 0 .1; move -50 -85.60 -60 15 0 0 0 0 .5;  select all; color cpk; wireframe 80; spacefill; select hoh; wireframe off; spacefill off;", "", false );
+        </script>
+            </font><font face="Arial, Helvetica, sans-serif" size="2" color="#000000">Spacefill 
+            is another commonly used display. Spacefill rendering displays the 
+            Van der Waals radius of each atom as a solid sphere by default.</font></p>
+          <p><font size="2" face="Arial, Helvetica, sans-serif"> 
+            <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load bdna2.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; move 180 0 0 0 0 0 0 0 .1; move -50 -85.60 -60 15 0 0 0 0 .5;  select dna; color cpk; spacefill 50; delay 1; spacefill 100; delay 1; spacefill 150; delay 1; spacefill 200; delay 1; spacefill 250; delay 1; spacefill 300; delay 1; spacefill; select hoh; wireframe off; spacefill off;", "", false );
+        </script>
+            </font> <font face="Arial, Helvetica, sans-serif" size="2" color="#000000">Spacefill 
+            radii can be altered by a numerical specification (see below). </font></p>
+          <p><font size="2" face="Arial, Helvetica, sans-serif"> 
+            <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit; zap;load bdna2.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; move 180 0 0 0 0 0 0 0 .1; move -50 -85.60 -60 15 0 0 0 0 .5;  anim on; select dna; color cpk; wireframe 40; spacefill 80; delay 1; spacefill 100; delay 1; wireframe 60; spacefill 150; delay 1; wireframe 80; spacefill 200;', "", false );
+        </script>
+            Different &quot;ball and stick&quot; representations can be achieved 
+            by varying the thickness of wireframe and the radii of spacefill.</font> 
+          </p>
+          <p> <font size="2" face="Arial, Helvetica, sans-serif"> 
+            <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load bdna2.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; move 180 0 0 0 0 0 0 0 .1; move -50 -85.60 -60 15 0 0 0 0 .5;  select dna; color cpk; spacefill; delay 1; spacefill off; dots; wireframe off; spacefill off;", "", false );
+        </script>
+            </font> <font face="Arial, Helvetica, sans-serif" size="2" color="#000000">Dots 
+            is a display similar to spacefill in that the diameter of the spheres 
+            formed are equal to that of the Van der Waals radius. Dots combines 
+            easily with other display commands to provide useful effects. Combining 
+            wireframe and dots displays can show Van der Waals surfaces clearly 
+            for a loop or secondary structure. </font> </p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2" color="#000000">So 
+            far, we have considered displays that affect all atoms of a molecule, 
+            unless particular atoms are selected (see below, <a href="#IV" target="_self">The 
+            Select Command</a>). Sometimes showing only the backbone of a molecule 
+            is desired. There are several displays that illustrate the backbone 
+            conformation of a molecule:</font> </p>
+          <blockquote> 
+            <p> <font size="2" face="Arial, Helvetica, sans-serif"> 
+              <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select protein, nucleic; wireframe 80; backbone 80; select hoh; wireframe off; spacefill off; select all; wireframe 60; delay .3; wireframe 40; delay .3; wireframe 20; delay .3; wireframe 10; delay .3; wireframe off; move 0 360 0 0 0 0 0 0 5', "", false );
+        </script>
+              </font> <font face="Arial, Helvetica, sans-serif" size="2" color="#000000">The 
+              backbone display shows the polypeptide backbone of a <font color="#FF00FF">protein</font> 
+              or the sugar-phosphate backbone of a <font color="#FF0000">nucleic 
+              acid</font> as a train of bonds connecting the adjacent alpha carbons 
+              of each amino acid (protein) or phosphorus atoms (nucleic acid) 
+              in sequential order. </font></p>
+            <p> <font size="2" face="Arial, Helvetica, sans-serif"> 
+              <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select protein, nucleic; wireframe 80; trace 80; select hoh; wireframe off; spacefill off; select all; wireframe 60; delay .3; wireframe 40; delay .3; wireframe 20; delay .3; wireframe 10; delay .3; wireframe off; move 0 360 0 0 0 0 0 0 5", "", false );
+        </script>
+              </font><font face="Arial, Helvetica, sans-serif" size="2" color="#000000">Trace 
+              is a display similar to backbone, but with smoothed transitions 
+              between the alpha carbons of a <font color="#FF00FF">peptide chain</font> 
+              or the phosphorus atoms of <font color="#FF0000">nucleic acids</font>. 
+              </font> </p>
+            <p><font face="Arial, Helvetica, sans-serif" size="2" color="#000000">There 
+              are two displays that are excellent for showing secondary structure: 
+              <br />
+              </font> <font size="2" face="Arial, Helvetica, sans-serif"> 
+              <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select protein, nucleic; wireframe 80; ribbons; select hoh; wireframe off; spacefill off; select all; wireframe 60; delay .3; wireframe 40; delay .3; wireframe 20; delay .3; wireframe 10; delay .3; wireframe off; move 0 360 0 0 0 0 0 0 5; select protein; color structure; delay 1; move 0 80 0 0 0 0 0 0 4", "", false );
+        </script>
+              </font><font face="Arial, Helvetica, sans-serif" size="2" color="#000000">ribbons; 
+              </font><font size="2" face="Arial, Helvetica, sans-serif"> 
+              <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select protein, nucleic; wireframe 80; cartoons; select hoh; wireframe off; spacefill off; select all; wireframe 60; delay .3; wireframe 40; delay .3; wireframe 20; delay .3; wireframe 10; delay .3; wireframe off; move 0 360 0 0 0 0 0 0 5; select protein; color structure; delay 1; move 0 80 0 0 0 0 0 0 4', "", false );
+        </script>
+              </font><font face="Arial, Helvetica, sans-serif" size="2" color="#000000">cartoons. 
+              Ribbons smooth the backbone, like trace, but display the backbone 
+              as a wide, flattened band. Cartoons does the same except that <font color="#FF0000">nucleic 
+              acid</font> backbones are displayed as a trace and <font face="Arial, Helvetica, sans-serif">the 
+              nitrogenous bases of <font color="#FF0000">nucleic acids</font> 
+              are rendered as flat rings. </font>Numerical modifications can be 
+              used to change the width of the band. In default mode of both ribbons 
+              and cartoons, the width of <font color="#FF0066">alpha helical</font> 
+              and <font color="#FFCC00">beta strand</font> secondary structure 
+              is greater than that of loops. Cartoon has the feature of indicating 
+              amino-carboxy polarity</font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+              of peptides. This is quite convenient, e.g. when showing the <font face="Arial, Helvetica, sans-serif">parallel 
+              or antiparallel arrangement of </font><font color="#FFCC00">b<font face="Arial, Helvetica, sans-serif">eta 
+              strands</font></font><font face="Arial, Helvetica, sans-serif"> 
+              in a beta sheet.</font></font></p>
+            <p> <font size="2" face="Arial, Helvetica, sans-serif"> 
+              <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select protein, nucleic; wireframe 80; strands; select hoh; wireframe off; spacefill off; select all; wireframe 60; delay .3; wireframe 40; delay .3; wireframe 20; delay .3; wireframe 10; delay .3; wireframe off; move 0 360 0 0 0 0 0 0 5", "", false );
+        </script>
+              </font> <font face="Arial, Helvetica, sans-serif" size="2" color="#000000">Strands 
+              is a rendering similar to ribbons and cartoons, but with the backbones 
+              displayed as a series of thin lines. Strands can be indicated with 
+              dashed lines (see below).</font></p>
+            <p><font size="2" face="Arial, Helvetica, sans-serif"> 
+              <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select protein, nucleic; wireframe 80; rockets 2.0; select hoh; wireframe off; spacefill off; select all; wireframe 60; delay .3; wireframe 40; delay .3; wireframe 20; delay .3; wireframe 10; delay .3; wireframe off; move 0 360 0 0 0 0 0 0 5", "", false );
+        </script>
+              Rockets and 
+              <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select protein, nucleic; wireframe 80; meshribbon 2.0; select hoh; wireframe off; spacefill off; select all; wireframe 60; delay .3; wireframe 40; delay .3; wireframe 20; delay .3; wireframe 10; delay .3; wireframe off; move 0 360 0 0 0 0 0 0 5", "", false );
+</script>
+              meshribbons are two additional representations of backbone conformations.</font> 
+            </p>
+          </blockquote>
+          <p><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+            Lighting effects can be employed to change the appearance of a molecular 
+            display. For example:</font></p>
+          <blockquote> 
+            <p><font size="2" face="Arial, Helvetica, sans-serif"> 
+              <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit; zap;load bdna2.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; move 180 0 0 0 0 0 0 0 .1; move -50 -85.60 -60 15 0 0 0 0 .5;  select all; color cpk; set ambient 20; wireframe 80; spacefill; select hoh; wireframe off; spacefill off; delay 2; set ambient 30; delay 1; set ambient 40; delay 1; set ambient 50; delay 1; set ambient 60; delay 1; set ambient 70; delay 1;', "", false );
+        </script>
+              </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">Ambient 
+              lighting intensity can be manipulated.</font></p>
+            <p><font size="2" face="Arial, Helvetica, sans-serif"> 
+              <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit; zap;load bdna2.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; move 180 0 0 0 0 0 0 0 .1; move -50 -85.60 -60 15 0 0 0 0 .5;  select all; color cpk; set specpower 0; wireframe 80; spacefill; select hoh; wireframe off; spacefill off; delay 2; set specpower 10; delay 1; set specpower 20; delay 1; set specpower 40; delay 1; set specpower 60; delay 1; set specpower 80; delay 1; set specpower 100;', "", false );
+        </script>
+              </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">Specular 
+              highlights on atoms are white reflections of the &quot;light source&quot;. 
+              The degree of specular highlighting can be changed.</font><font size="2" face="Arial, Helvetica, sans-serif"> 
+              </font></p>
+          </blockquote>
+          <p><font size="2" face="Arial, Helvetica, sans-serif"> 
+            <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load bdna2.pdb; set frank off; select all; hbonds off; select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; move 180 0 0 0 0 0 0 0 .1; move -50 -85.60 -60 15 0 0 0 0 .5;  select all; color cpk; wireframe 100; select hoh; wireframe off; spacefill off; select nucleic; isosurface sasurface; delay 1; color isosurface white; delay 1; color isosurface translucent 5.0 white; move 0 360 0 0 0 0 0 0 6;", "", false );
+        </script>
+            It is sometimes useful to display the surfaces of molecules. For example, 
+            the shapes of ligand binding pockets or catalytic sites are often 
+            illuminated is a surface view. To learn about Jmol suface displays, 
+            consult our <a href="../surfaces/surfaces/surfaces.htm">SURFACES </a>page.</font></p>
+          <p align="center"><font face="Arial, Helvetica, sans-serif" size="3" color="#000000"><b>Sample 
+            Display Commands </b></font> </p>
+          <table width="100%" border="1">
+            <tr> 
+              <td width="53%" height="9"><p align="left"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"><b>Buttons/Effects</b><br />
+                  code for buttons = <br />
+                  &lt;script language=&quot;JavaScript&quot; type=&quot;text/javascript&quot;&gt;<br />
+                  jmolRadio('!quit; zap;<font color="#3366CC">Jmol scripts here</font>', 
+                  &quot;&quot;, false );<br />
+                  &lt;/script&gt;</font></p></td>
+              <td width="47%" height="9"><p><font face="Arial, Helvetica, sans-serif" size="2" color="#3366CC"><b>relevant 
+                  Jmol scripts in buttons (the scripts below are often preceded 
+                  by commands that load molecules and turn off default displays 
+                  - see <a href="#nb">NB</a>, below)</b></font></p>
+                <p><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">Place 
+                  between ' ' in button code</font></p></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; wireframe", "", false );
+        </script>
+                </font> <font face="Arial, Helvetica, sans-serif" size="2" color="#000000">wireframe 
+                (default thickness)</font></td>
+              <td width="47%"><font color="#000000">wireframe; </font></td>
+            </tr>
+            <tr> 
+              <td width="53%"><p><font size="2" face="Arial, Helvetica, sans-serif"> 
+                  &nbsp; 
+                  <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; wireframe 50", "", false );
+              </script>
+                  </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                  wireframe 50 (50 RasMol units = 0.2 &Aring;)</font></p></td>
+              <td width="47%"><font color="#000000"> wireframe 50; </font></td>
+            </tr>
+            <tr> 
+              <td width="53%"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                </font><font size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; wireframe 100", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                wireframe 100 (100 RasMol units = 0.4 &Aring;)</font></td>
+              <td width="47%"><font color="#000000"> wireframe 100; </font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; wireframe .6", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                wireframe 0.6 (0.6&Aring; = 150 RasMol units)</font></td>
+              <td width="47%"><font color="#000000"> wireframe 0.6;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                </font><font size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; spacefill", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">spacefill 
+                (default = Van der Waals radius) </font></td>
+              <td width="47%"><font color="#000000"> spacefill;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                </font><font size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; spacefill 50", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">spacefill 
+                50 (50 RasMol units = 0.2 &Aring;)</font></td>
+              <td width="47%"><font color="#000000">spacefill 50;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                </font><font size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; spacefill 100", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">spacefill 
+                100 (100 RasMol units = 0.4 &Aring;)</font></td>
+              <td width="47%"><font color="#000000"> spacefill 100;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                </font><font size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; spacefill 500", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">spacefill 
+                500 (500 RasMol units =2.0 &Aring;)</font></td>
+              <td width="47%"><font color="#000000"> spacefill 500;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%" height="30"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                </font><font size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; spacefill .5", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">spacefill 
+                0.5 (0.5 &Aring; = 125 RasMol units)</font></td>
+              <td width="47%"><font color="#000000"> spacefill 0.5;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                </font><font size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; dots", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">dots 
+                (~100 dots per atom)</font></td>
+              <td width="47%"><font color="#000000"> spacefill off; dots;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%"><font color="#000000"> &nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; dots; wireframe 100", "", false );
+        </script>
+                dots wireframe combo</font></font></td>
+              <td width="47%"><font color="#000000">wireframe 100; dots;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; backbone", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">backbone 
+                (default thickness)</font></td>
+              <td width="47%"><font color="#000000"> backbone;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; backbone 100", "", false );
+        </script>
+                </font> <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">backbone 
+                100 (100 RasMol units = 0.4 &Aring;)</font></td>
+              <td width="47%"><font color="#000000"> backbone 100;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%"><p><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                  &nbsp; </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                  <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; backbone .6", "", false );
+        </script>
+                  </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">backbone 
+                  0.6 (0.6&Aring; = 150 RasMol units)</font></p></td>
+              <td width="47%"><font color="#000000">backbone 0.6;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; trace", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">trace 
+                (default = 90 RasMol units)</font></td>
+              <td width="47%"><font color="#000000"> trace;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; trace 10", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">trace 
+                10 (10 RasMol units = 0.04 &Aring;)</font></td>
+              <td width="47%"><font color="#000000"> trace 10;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; trace 50", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">trace 
+                50 (50 RasMol units = 0.2 &Aring;)</font></td>
+              <td width="47%"><font color="#000000"> trace 50;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; trace 100", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">trace 
+                100 (100 RasMol units = 0.4 &Aring;)</font></td>
+              <td width="47%"><font color="#000000"> trace 100;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%" height="30"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; trace .6", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">trace 
+                0.6 (0.6&Aring; = 150 RasMol units)</font></td>
+              <td width="47%"><font color="#000000">trace 0.6;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                &nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; ribbon", "", false );
+            </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">ribbon 
+                (default thickness)</font></td>
+              <td width="47%"><font color="#000000"> ribbon;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; ribbon 100", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">ribbon 
+                100 (100 RasMol units = 0.4&Aring;) </font></td>
+              <td width="47%"><font color="#000000"> ribbon 100;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; ribbon 250", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">ribbon 
+                250 (250 RasMol units =1.0 &Aring;)</font></td>
+              <td width="47%"><font color="#000000"> ribbon 250;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%" height="30">&nbsp;<font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; ribbon 1.5", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">ribbon 
+                1.5 (1.5 &Aring; = 375 RasMol units)</font></td>
+              <td width="47%"><font color="#000000">ribbon 1.5;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; cartoon", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">cartoon 
+                (default thickness)</font></td>
+              <td width="47%"><font color="#000000"> cartoon;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; cartoon 100", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">cartoon 
+                100 (100 RasMol units = 0.4 &Aring;)</font></td>
+              <td width="47%"><font color="#000000"> cartoon 100;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; cartoon 250", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">cartoon 
+                250 (250 RasMol units =1.0 &Aring;)</font></td>
+              <td width="47%"><font color="#000000"> cartoon 250;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%" height="31">&nbsp;<font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; cartoon 1.5", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">cartoon 
+                1.5 (1.5 &Aring; = 375 RasMol units)</font></td>
+              <td width="47%"><font color="#000000">cartoon 1.5;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; strands", "", false );
+        </script>
+                </font> <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">strands 
+                (default thickness)</font></td>
+              <td width="47%"><font color="#000000">strands;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; strands 100", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">strands 
+                100 (100 RasMol units = 0.4 &Aring;) </font></td>
+              <td width="47%"><font color="#000000">strands 100;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; strands 250", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">strands 
+                250 (250 RasMol units = 1 &Aring;)</font></td>
+              <td width="47%"><font color="#000000">strands 250;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; strands; set strands 3", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">3 
+                strands</font></td>
+              <td width="47%"><font color="#000000">strands; set strands 3;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; strands; set strands 6", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">6 
+                strands</font></td>
+              <td width="47%"><font color="#000000">strands; set strands 6;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select protein; wireframe .15; spacefill .45", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">ball 
+                and stick</font></td>
+              <td width="47%"><font color="#000000">wireframe 0.15; spacefill 
+                0.45;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select protein; wireframe 30; spacefill 75", "", false );
+        </script>
+                </font> <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">ball 
+                and stick small</font></td>
+              <td width="47%"><font color="#000000"> wireframe 30; spacefill 75;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select protein; wireframe 75; spacefill 150", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">ball 
+                and stick large</font></td>
+              <td width="47%"><font color="#000000"> wireframe 75; spacefill 150;</font></td>
+            </tr>
+            <tr> 
+              <td>&nbsp;<font color="#000000" size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select protein; rocket 2.5", "", false );
+        </script>
+                rocket cartoons (# between 0.1 and 4.0)</font></td>
+              <td>rocket 2.5</td>
+            </tr>
+            <tr> 
+              <td>&nbsp;<font color="#000000"><font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select protein; meshribbon 2.5", "", false );
+        </script>
+                meshribbons </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">(# 
+                between 0.1 and 4.0)</font></font></td>
+              <td>meshribbon 2.5</td>
+            </tr>
+            <tr> 
+              <td width="53%" height="5">&nbsp;<font size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; spacefill; set ambient 5", "", false );
+        </script>
+                </font> <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">low 
+                ambient lighting intensity</font></td>
+              <td width="47%" height="5"><font color="#000000">set ambient 5;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%" height="30"><p><font size="2" face="Arial, Helvetica, sans-serif"> 
+                  &nbsp; 
+                  <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; spacefill; set ambient 40", "", false );
+              </script>
+                  </font> <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">medium 
+                  ambient lighting intensity</font></p></td>
+              <td width="47%" height="30"><font color="#000000">set ambient 40;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%" height="31">&nbsp;<font size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; spacefill; set ambient 80", "", false );
+        </script>
+                </font> <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">high 
+                ambient lighting intensity</font></td>
+              <td width="47%"><font color="#000000">set ambient 80;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%" height="13">&nbsp;<font size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; spacefill; set ambient 40; set specpower 5", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">set 
+                low specular highlight intensity</font></td>
+              <td width="47%" height="13"><font color="#000000">set ambient 40; 
+                set specpower 5;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%" height="19">&nbsp;<font size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; spacefill; set ambient 40; set specpower 40", "", false );
+        </script>
+                </font> <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">set 
+                medium specular highlight intensity</font></td>
+              <td width="47%" height="19"><font color="#000000">set ambient 40; 
+                set specpower 40;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%" height="13">&nbsp;<font size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; spacefill; set ambient 40; set specpower 90", "", false );
+        </script>
+                </font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">set 
+                high specular highlight intensity</font></td>
+              <td width="47%" height="13"><font color="#000000">set ambient 40; 
+                set specpower 90;</font></td>
+            </tr>
+          </table>
+          <p align="center"><font face="Arial, Helvetica, sans-serif" size="4"><a href="#top" target="_self">return 
+            to beginning of exhibit</a></font> <font size="4" face="Arial, Helvetica, sans-serif"><a name="iii" id="iii"></a></font></p>
+          <p align="center"><font size="4" face="Arial, Helvetica, sans-serif"><a href="#intro"><font color="#0000FF" size="1">[Introduction]</font></a><font color="#0000FF" size="1"> 
+            <a href="#II">[II. Display]</a> <a href="#iii" target="_self">[III. 
+            Loading and Positioning]</a> <a href="#IV">[IV. Selecting and Labeling]</a> 
+            <a href="#V"><br />
+            [V. Coloring and Schemes]</a> <a href="#VI">[VI. Illustrating Bonds]</a> 
+            <a href="#VII">[VII. Animation]</a></font></font></p>
+          <hr /> <hr /> <h4> <font size="4" face="Arial, Helvetica, sans-serif">III. 
+            Loading and Positioning</font></h4>
+          <p><font face="Arial, Helvetica, sans-serif" size="2"><br />
+            <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gc.pdb; rotate y -45; rotate x 90; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; select all; wireframe 50", "", false );
+            </script>
+            Loading a pdb by use of a button is useful for introducing a new molecule 
+            into an exhibit or for simply resetting a molecule after it has been 
+            manipulated. </font></p>
+          <p><font size="2" face="Arial, Helvetica, sans-serif"><a name="nb" id="nb"></a>N.B.: 
+            When constructing a Jmol script for a button in a molecular exhibit, 
+            it is helpful to incorporate a series of default commands that turn 
+            off any previous scripts invoked by other buttons. We recommend the 
+            following set of commands be used upon loading: &quot;set frank off; 
+            select all; hbonds off; spin off; wireframe off; spacefill off; trace 
+            off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons 
+            off; label off; monitor off&quot;. This &quot;blank state&quot; can 
+            then be modified by subsequent commands in the script. </font></p>
+          <p> <font face="Arial, Helvetica, sans-serif" size="2"> 
+            <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gc.pdb; set frank off; select all; hbonds off;rotate y -45; rotate x 90; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; select all; wireframe 50; set echo bottom center; echo original orientation; color echo black; delay 2; rotate x -90; set echo bottom center; echo rotate 90 degrees around X axis; color echo black; delay 4; echo; rotate x 90; set echo bottom center; echo original orientation; color echo black; delay 2; rotate y 90; set echo bottom center; echo rotate 90 degrees around Y axis; color echo black; delay 4; echo; rotate y -90; set echo bottom center; echo original orientation; color echo black; delay 2; rotate z 90; set echo bottom center; echo rotate 90 degrees around Z axis; color echo black; delay 4; echo; rotate z -90; set echo bottom center; echo original orientation; color echo black; delay 2;####", "", false );
+        </script>
+            Once a pdb is loaded it is often useful to orient the molecule in 
+            3-D by rotating it around the X,Y, or Z axes. Rotation commands are 
+            expressed in degrees so a rotation of 360 around a particular axis 
+            will show no change in the orientation of the molecule. </font> </p>
+          <p align="center"><img src="file:///U|/files/html/scripting/axes.gif" width="198" height="198" /> 
+          </p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">A molecule can 
+            also be translated along any of the axes without rotation:<br />
+            <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gc.pdb; set frank off; select all; hbonds off;rotate y -45; rotate x 90; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; select all; wireframe 50; set echo bottom center; echo original position; color echo black; delay 2; translate x 15; set echo bottom center; echo translate 15% on X axis; color echo black; delay 3; echo; translate x 0; set echo bottom center; echo original position; color echo black; delay 2; translate y -15; set echo bottom center; echo translate 15% on Y axis; color echo black; delay 3; echo; translate y 0; set echo bottom center; echo original position; color echo black; delay 2; zoom 200; set echo bottom center; echo translate (zoom) 200% on Z axis; color echo black; delay 3; echo; zoom 100; set echo bottom center; echo original position; color echo black; delay 2;####", "", false );
+            </script>
+            Translation along the X axis causes the molecule to move left or right. 
+            Translation along the Y axis causes the molecule to move up or down. 
+            Note: contrary to intuition, positive numbers for Y translation move 
+            molecules down and negative numbers move molecules up. </font> <font face="Arial, Helvetica, sans-serif" size="2">Translation 
+            on the Z axis is called zoom, because it brings the molecule closer 
+            to or farther away from the viewer. Translation commands are expressed 
+            in percentage. Thus, to double the magnification (zoom), a numerical 
+            value of 200 is used.</font> </p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">Rotation, translation, 
+            and zoom commands to effect a desired view can be incorporated in 
+            the initial loading of a pdb.</font> </p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2"><i>There are other, 
+            smoother ways to move, rotate, and zoom molecules that will be discussed 
+            later, in the <a href="#VII" target="_self">Animation section</a></i>. 
+            </font> </p>
+          <p align="center"><font face="Arial, Helvetica, sans-serif" size="3" color="#000000"><b>Sample 
+            Loading and Positioning Commands</b></font></p>
+          <table width="100%" border="1">
+            <tr> 
+              <td width="53%" height="9"><p align="left"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"><b>Buttons/Effects</b><br />
+                  code for buttons = <br />
+                  &lt;script language=&quot;JavaScript&quot; type=&quot;text/javascript&quot;&gt;<br />
+                  jmolRadio('!quit; zap;<font color="#3366CC">Jmol scripts here</font>', 
+                  &quot;&quot;, false );<br />
+                  &lt;/script&gt;</font></p></td>
+              <td width="47%" height="9"><p><font face="Arial, Helvetica, sans-serif" size="2" color="#3366CC"><b>relevant 
+                  Jmol scripts in buttons (the scripts below are often supplemented 
+                  by commands that orient molecules and change default displays 
+                  - see NB, above) </b></font></p>
+                <p><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">P</font><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">lace 
+                  between ' ' in button code</font></p></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load a-helix.pdb; background white; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate z 40; rotate x 45; select all; wireframe 0.15; spacefill 0.45;", "", false );
+        </script>
+                </font> <font face="Arial, Helvetica, sans-serif" size="2" color="#000000">load 
+                a new molecule (.pdb file)</font></td>
+              <td width="47%">load 'path to the pdb file', e.g. <br />
+                load ../pdbs/a-helix.pdb</td>
+            </tr>
+            <tr> 
+              <td width="53%" height="30"><p><font size="2" face="Arial, Helvetica, sans-serif"> 
+                  &nbsp; 
+                  <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit; zap;load a-helix.pdb; background white; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate z 40; rotate x 45; select all; wireframe 0.15; spacefill 0.45; color group; set echo bottom center; echo starting orientation; color echo black; delay 2; echo; rotate x 90; set echo bottom center; echo 90 degree rotation around X axis; color echo black; ', "", false );
+              </script>
+                  </font><font face="Arial, Helvetica, sans-serif" size="2">rotate 
+                  90&deg; on X axis</font></p></td>
+              <td width="47%"><font color="#000000"> rotate x 90; </font></td>
+            </tr>
+            <tr> 
+              <td width="53%"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                </font><font size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit; zap;load a-helix.pdb; background white; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate z 40; rotate x 45; select all; wireframe 0.15; spacefill 0.45; color group; set echo bottom center; echo starting orientation; color echo black; delay 2; rotate y 180; set echo bottom center; echo 180 degree rotation around Y axis; color echo black; ', "", false );
+        </script>
+                </font><font face="Arial, Helvetica, sans-serif" size="2">rotate 
+                180&deg; on Y axis</font></td>
+              <td width="47%"><font color="#000000"> rotate y 180;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font size="2" face="Arial, Helvetica, sans-serif"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit; zap;load a-helix.pdb; background white; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate z 40; rotate x 45; select all; wireframe 0.15; spacefill 0.45; color group; set echo bottom center; echo starting orientation; color echo black; delay 2; echo; rotate z 90; set echo bottom center; echo 90 degree rotation around Z axis; color echo black;####; ', "", false );
+        </script>
+                rotate 90&deg; on Z axis</font></td>
+              <td width="47%"><font color="#000000"> rotate z 90;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit; zap;load a-helix.pdb; background white; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate z 40; rotate x 45; select all; wireframe 0.15; spacefill 0.45; set echo bottom center; echo starting position; color echo black; delay 2; echo; translate x 10; set echo bottom center; echo translate +10% on X axis; color echo black;####', "", false );
+        </script>
+                translate 10% to right on X axis</font></td>
+              <td width="47%"><font color="#000000"> translate x 10;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit; zap;load a-helix.pdb; background white; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate z 40; rotate x 45; select all; wireframe 0.15; spacefill 0.45; set echo bottom center; echo starting position; color echo black; delay 2; echo; translate x -10; set echo bottom center; echo translate -10% on X axis; color echo black; ', "", false );
+        </script>
+                translate 10% to left on X axis</font></td>
+              <td width="47%"><font color="#000000">translate x -10;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit; zap;load a-helix.pdb; background white; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate z 40; rotate x 45; select all; wireframe 0.15; spacefill 0.45; set echo bottom center; echo starting position; color echo black; delay 2; echo; translate y -10; set echo bottom center; echo translate 10% on Y axis; color echo black; #####; ', "", false );
+        </script>
+                translate 10% up on Y axis </font></td>
+              <td width="47%"><font color="#000000"> translate y -10;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%" height="31">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit; zap;load a-helix.pdb; background white; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate z 40; rotate x 45; select all; wireframe 0.15; spacefill 0.45; set echo bottom center; echo starting position; color echo black; delay 2; echo; translate y 10; set echo bottom center; echo translate -10% on Y axis; color echo black; #####;', "", false );
+        </script>
+                translate 10% down on Y axis</font></td>
+              <td width="47%"><font color="#000000"> translate y 10;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%" height="30">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit; zap;load a-helix.pdb; background white; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate z 40; rotate x 45; select all; wireframe 0.15; spacefill 0.45; set echo bottom center; echo starting position; color echo black; delay 2; zoom 150; echo; set echo bottom center; echo zoom 1.5X; color echo black; ######;', "", false );
+        </script>
+                translate 50% on z axis (zoom in)</font></td>
+              <td width="47%"><font color="#000000">zoom 150;</font></td>
+            </tr>
+            <tr> 
+              <td width="53%">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit; zap;load a-helix.pdb; background white; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate z 40; rotate x 45; select all; wireframe 0.15; spacefill 0.45; set echo bottom center; echo starting position; color echo black; delay 2; echo; zoom 50; set echo bottom center; echo zoom .5X; color echo black; #####; ', "", false );
+        </script>
+                translate -50% on z axis (zoom out)</font></td>
+              <td width="47%"><font color="#000000"> zoom 50;</font></td>
+            </tr>
+          </table>
+          <p align="center"><font face="Arial, Helvetica, sans-serif" size="4"><a href="#top" target="_self">return 
+            to beginning of exhibit</a></font> <font size="4" face="Arial, Helvetica, sans-serif"><a name="IV" id="IV"></a></font></p>
+          <p align="center"><font size="4" face="Arial, Helvetica, sans-serif"><a href="#intro"><font color="#0000FF" size="1">[Introduction]</font></a><font color="#0000FF" size="1"> 
+            <a href="#II">[II. Display]</a> <a href="#iii" target="_self">[III. 
+            Loading and Positioning]</a> <a href="#IV">[IV. Selecting and Labeling]</a> 
+            <a href="#V"><br />
+            [V. Coloring and Schemes]</a> <a href="#VI">[VI. Illustrating Bonds]</a> 
+            <a href="#VII">[VII. Animation]</a></font></font></p>
+          <hr /> <hr /> <h4> <font size="4" face="Arial, Helvetica, sans-serif">IV. 
+            Selecting and Labeling</font></h4>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">For the display 
+            commands already discussed, and for coloring and bond options to be 
+            addressed later, it is often desirable to limit rendering changes 
+            to particular atoms or sets of atoms. The select command is used to 
+            specify what atoms of a molecular file will be affected by subsequent 
+            rendering commands (e.g spacefill, cartoons, etc.). </font></p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">There are a number 
+            of predefined sets of atoms such as &quot;all&quot;, &quot;backbone&quot;, 
+            &quot;protein&quot;, &quot;ligand&quot;, &quot;hetero&quot;, &quot;helix&quot;, 
+            &quot;sheet&quot;, &quot;sidechain&quot;, etc.. </font></p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">&quot;Select all&quot; 
+            selects all atoms. </font></p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">&quot;Select protein&quot; 
+            or &quot;select amino&quot; both select all of the amino acids. </font></p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">&quot;Select nucleic&quot; 
+            selects all nucleic acid atoms, but &quot;select dna&quot; or &quot;select 
+            rna&quot; works on specified nucleic acid residues (DNA=a,t,g,c; RNA=a,u,g,c). 
+            </font></p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">&quot;Select hetero&quot; 
+            will select all heterogeneous atoms, including water, ions, and ligands. 
+            </font></p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">&quot;Select water&quot; 
+            or &quot;select hoh&quot; will select only the water molecules (usually 
+            only oxygen atoms of water are present in a pdb file), and &quot;select 
+            ligand&quot; will select only a ligand.</font></p>
+          <p><font size="2" face="Arial, Helvetica, sans-serif">&quot;Select helix&quot; 
+            and &quot;select sheet&quot; are used to select alpha helices and 
+            beta sheets, respectively.</font></p>
+          <p><font size="2" face="Arial, Helvetica, sans-serif">&quot;Select backbone&quot; 
+            and &quot;select sidechain&quot; are used to select backbone or sidechain 
+            atoms, respectively.</font></p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">The select command 
+            can also be used to select a specific chain in a molecular file, a 
+            single amino acid, or even a single atom (useful!). </font> <font face="Arial, Helvetica, sans-serif" size="2">In 
+            selecting atoms or residues, it is possible to discriminate between 
+            chains in a file that contains multiple molecules. For example, let's 
+            say that you wish to select a single residue (#10) on one chain of 
+            a pdb file with a dimeric protein bound to DNA (four chains). Each 
+            chain will likely have a residue # 10. If the command &quot;select 
+            10&quot; were used, four residues would be selected, one on each of 
+            the protein chains and one on each strand of DNA. Instead, if the 
+            desired residue (#10) is on chain A, then the script &quot;select 
+            :a and 10&quot; or &quot;select 10:a&quot; would select only residue 
+            #10 on chain A, ignoring the residue #10s on other chains. </font> 
+          </p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">Define is a command 
+            that is very useful when dealing with a group of atoms that do not 
+            belong to a predefined set, such as a phosphate on a ligand or the 
+            tail of an ATP molecule. The atoms of interest can be associated under 
+            one atom expression that can then be selected with ease. The format 
+            of the script for defining a group of atoms is &quot;define 'name 
+            of group' 'atoms to be grouped' &quot;. </font> </p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">Another type of 
+            selection is the restrict command. &quot;Restrict&quot; limits the 
+            display to those atoms specified in the restrict script. </font> </p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">Selected atoms 
+            can be labeled using the label command. Labels can be colored, and 
+            the fontsize height set (in pixels) using appropriate commands. The 
+            default label color is the selected atom's color and the default fontsize 
+            is 8 pixels.</font> <font face="Arial, Helvetica, sans-serif" size="2">The 
+            position of the label can be altered by setting the label offset. 
+            </font></p>
+          <p align="center"><font face="Arial, Helvetica, sans-serif" size="3" color="#000000"><b>Sample 
+            Selecting and Labeling Commands</b></font></p>
+          <table width="100%" border="1">
+            <tr> 
+              <td width="56%"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"><b>Buttons/Effects</b><br />
+                code for buttons = <br />
+                &lt;script language=&quot;JavaScript&quot; type=&quot;text/javascript&quot;&gt;<br />
+                jmolRadio('!quit; zap;<font color="#3366CC">Jmol scripts here</font>', &quot;&quot;, 
+                false );<br />
+                &lt;/script&gt;</font></td>
+              <td width="44%"><p align="left"><font face="Arial, Helvetica, sans-serif" size="2" color="#3366CC"><b>relevant 
+                  Jmol scripts in buttons (the scripts below are often supplemented 
+                  by commands that orient molecules and change default displays 
+                  - see NB, above)<br />
+                  <br />
+                  </b><font color="#000000">Place between ' ' in button code</font></font></p></td>
+            </tr>
+            <tr> 
+              <td width="56%" height="53">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select protein, nucleic; spacefill", "", false );
+        </script>
+                display all atoms in spacefill</font></td>
+              <td width="44%">select all; spacefill; select nucleic; color red; 
+                select protein; color magenta;</td>
+            </tr>
+            <tr> 
+              <td width="56%">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select protein, nucleic; wireframe; select amino; spacefill; select hetero; wireframe off", "", false );
+        </script>
+                display protein in spacefill, display RNA in wireframe</font></td>
+              <td width="44%">select protein, nucleic; wireframe; select amino; 
+                spacefill; <font color="#3366CC">or</font> select all; wireframe; 
+                select protein; spacefill;</td>
+            </tr>
+            <tr> 
+              <td width="56%">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select all; wireframe; select rna; spacefill; select hetero; wireframe off", "", false );
+        </script>
+                display RNA in spacefill, display protein in wireframe</font></td>
+              <td width="44%">select rna, protein; wireframe; select nucleic; 
+                spacefill;</td>
+            </tr>
+            <tr> 
+              <td width="56%">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select all; wireframe; select hetero; spacefill", "", false );
+        </script>
+                display hetero atoms in spacefill, other molecules in wireframe</font></td>
+              <td width="44%">select all; wireframe; select hetero; spacefill;</td>
+            </tr>
+            <tr> 
+              <td width="56%">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select all; wireframe; select hoh; spacefill", "", false );
+        </script>
+                display water atoms in spacefill, other molecules (including other 
+                hetero atoms) in wireframe</font></td>
+              <td width="44%">select all; wireframe; select hoh; spacefill;</td>
+            </tr>
+            <tr> 
+              <td width="56%" height="56">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select all; wireframe; select hoh; spacefill 200; select ligand; spacefill", "", false );
+        </script>
+                display ligand atoms in default spacefill, water in small spacefill, 
+                other molecules in wireframe</font></td>
+              <td width="44%"><p>select all; wireframe; select hoh; spacefill 
+                  200; select ligand; spacefill;</p></td>
+            </tr>
+            <tr> 
+              <td height="30"><font face="Arial, Helvetica, sans-serif" size="2"> 
+                &nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select protein; trace 40; select protein and helix; trace off; cartoons", "", false );
+            </script>
+                display alpha helices in cartoons, remainder of protein in trace, 
+                all other atoms and molecules off</font></td>
+              <td>select all; wireframe off; select protein; trace 40; select 
+                protein and helix; trace off; cartoons;</td>
+            </tr>
+            <tr> 
+              <td height="30"><font face="Arial, Helvetica, sans-serif" size="2"> 
+                &nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select protein; trace 40; select protein and sheet; trace off; cartoons", "", false );
+            </script>
+                display beta sheets in cartoons, remainder of protein in trace, 
+                all other atoms and molecules off</font></td>
+              <td>select all; wireframe off; select protein; trace 40; select 
+                protein and sheet; trace off; cartoons;</td>
+            </tr>
+            <tr> 
+              <td width="56%">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select :b, :q; wireframe 80; select :b; spacefill", "", false );
+        </script>
+                display chain B in spacefill, chain Q in wireframe 80, all other 
+                atoms off</font></td>
+              <td width="44%">select all; wireframe off; select :b, :q; wireframe 
+                80; select :b; spacefill;</td>
+            </tr>
+            <tr> 
+              <td height="30"><font size="2" face="Arial, Helvetica, sans-serif"> 
+                &nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; restrict :q; cartoons", "", false );
+            </script>
+                display chain Q in cartoons, all other atoms off</font></td>
+              <td>restrict :q; cartoons;</td>
+            </tr>
+            <tr> 
+              <td height="30"><font size="2" face="Arial, Helvetica, sans-serif"> 
+                &nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select all; wireframe; select lys, a; spacefill", "", false );
+            </script>
+                display lysine residues and adenine residues in spacefill, water 
+                off, other atoms in wireframe</font></td>
+              <td>select all; wireframe; select lys, a; spacefill;</td>
+            </tr>
+            <tr> 
+              <td width="56%" height="82"><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select all; wireframe; select hetero; wireframe off; select 13; spacefill; select hoh; spacefill off", "", false );
+            </script>
+                display residue 13 in both chains in spacefill, other atoms in 
+                these chains in wireframe, all other atoms off</font></td>
+              <td width="44%">select all; wireframe; select hetero; wireframe 
+                off; select 13; spacefill; select hoh; spacefill off;</td>
+            </tr>
+            <tr> 
+              <td height="56"><font face="Arial, Helvetica, sans-serif" size="2"> 
+                &nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select all; wireframe; select hetero; wireframe off; select 13:b; spacefill", "", false );
+            </script>
+                display residue 13 in chain B in spacefill, other atoms in chains 
+                in wireframe, all other atoms off </font> </td>
+              <td>select all; wireframe; select hetero; wireframe off; select 
+                13:b; spacefill;</td>
+            </tr>
+            <tr> 
+              <td width="56%"><p><font face="Arial, Helvetica, sans-serif" size="2"> 
+                  &nbsp; 
+                  <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select all; wireframe; select hetero; wireframe off; select atomno=2318; spacefill;", "", false );
+              </script>
+                  display atom #2318 in spacefill, water atoms off, all other 
+                  atoms in wireframe</font></p></td>
+              <td width="44%">select all; wireframe; select atomno=2318; spacefill;</td>
+            </tr>
+            <tr> 
+              <td width="56%">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select all; wireframe; select atomno>2300 and atomno<2321; spacefill", "", false );
+        </script>
+                display atoms 2301-2320 (residue 13 of chain Q) in spacefill, 
+                waters off, all others atoms in wireframe</font></td>
+              <td width="44%">select all; wireframe; select atomno&gt;2300 and 
+                atomno&lt;2321; spacefill;</td>
+            </tr>
+            <tr> 
+              <td width="56%" height="56">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select protein, nucleic; trace 40; define contact 10:q, 11:q, 12:q; select contact; cartoons;", "", false );
+        </script>
+                define residues 10-12 on RNA as &quot;contact,&quot; display as 
+                cartoons, other parts of molecules in trace</font></td>
+              <td width="44%">select protein, nucleic; trace 40; define contact 
+                10:q, 11:q, 12:q; select contact; cartoons;</td>
+            </tr>
+            <tr> 
+              <td width="56%" height="82">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select all; wireframe; select ligand; spacefill; select atomno=3923; label glycerol; color label black;", "", false );
+        </script>
+                display ligand atoms in spacefill, all others in wireframe, label 
+                atom number 3923 &quot;glycerol&quot;</font></td>
+              <td width="44%" height="82">select all; wireframe; select ligand; 
+                spacefill; select atomno=3923; label glycerol; color label black;</td>
+            </tr>
+            <tr> 
+              <td width="56%">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select all; wireframe; select ligand; spacefill; select atomno=3923; label glycerol; color label black; set labeloffset 20 0;", "", false );
+        </script>
+                display ligand atoms in spacefill, all others in wireframe, label 
+                atom number 3923 &quot;glycerol,&quot; offset label [x, 20; y, 
+                0] </font></td>
+              <td width="44%">select all; wireframe; select ligand; spacefill; 
+                select atomno=3923; label glycerol; color label black; set labeloffset 
+                20 0;</td>
+            </tr>
+            <tr> 
+              <td width="56%">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select all; wireframe; select ligand; spacefill; select atomno=3923; label glycerol; color label black; set labeloffset 20 0; set fontsize 20; color label red", "", false );
+        </script>
+                display ligand atoms in spacefill, all others in wireframe, label 
+                atom number 3923&quot;glycerol,&quot; offset label [x, 20; y, 
+                0], set fontsize of label to 20, set color lof label to red</font></td>
+              <td width="44%">select all; wireframe; select ligand; spacefill; 
+                select atomno=3923; label glycerol; color label black; set labeloffset 
+                20 0; set fontsize 20; color label red;</td>
+            </tr>
+            <tr> 
+              <td width="56%">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1urn.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; rotate x -90; rotate y 60; select nucleic; color red; select protein; color magenta; select all; wireframe; select ligand; spacefill; select all; label off", "", false );
+        </script>
+                turn labels off </font></td>
+              <td width="44%">select all; label off;</td>
+            </tr>
+          </table>
+          <p align="center"><font face="Arial, Helvetica, sans-serif" size="4"><a href="#top" target="_self">return 
+            to beginning of exhibit</a></font> <font size="4" face="Arial, Helvetica, sans-serif"><a href="#intro"><a name="V" id="V"></a></a></font></p>
+          <p align="center"><font size="4" face="Arial, Helvetica, sans-serif"><a href="#intro"><font color="#0000FF" size="1">[Introduction]</font></a><font color="#0000FF" size="1"> 
+            <a href="#II">[II. Display]</a> <a href="#iii" target="_self">[III. 
+            Loading and Positioning]</a> <a href="#IV">[IV. Selecting and Labeling]</a> 
+            <a href="#V"><br />
+            [V. Coloring and Schemes]</a> <a href="#VI">[VI. Illustrating Bonds]</a> 
+            <a href="#VII">[VII. Animation]</a></font></font></p>
+          <hr /> <hr /> <h4><font size="4" face="Arial, Helvetica, sans-serif">V. 
+            Coloring and Coloring Schemes</font></h4>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">Coloring atoms, 
+            sets of atoms, or other selections is quite useful in crafting quality 
+            molecular exhibits. Explanatory text can be co-colored with specified 
+            structural features. Jmol is quite versatile in recognizing the names 
+            of prespecified colors, HTML binhex color codes, and RGB triplet codes. 
+            </font></p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">Jmol recognizes 
+            the RasMol defined color set and an extensive list of Javascript colors. 
+            Recognized colors include: <font color="#0000FF">blue<font color="#000000">,</font> 
+            </font><font color="#00bfff">deepskyblue</font><font color="00bfff"><font color="#000000">,</font></font><font color="#FFFF00"> 
+            <font color="#6495ED">cornflowerblue<font color="#000000">,</font></font> 
+            <font color="#5F9EA0">cadetblue</font><font color="5F9EA0"><font color="#000000">,</font></font> 
+            <font color="#40E0D0">turquoise<font color="#000000">,</font></font> 
+            </font><font color="#00FFFF">cyan</font>, <font color="#FFFF00">yellow</font>,<font color="#00FFFF"> 
+            <font color="#ffd700">gold</font><font color="#000000">,</font> </font><font color="#00CC00">green</font>, 
+            <font color="#2E8B57">greenblue</font>,<font color="#FF00FF"> <font color="#7fff00">chartreuse</font><font color="#000000">,</font> 
+            <font color="#00FA9A">mediumspringgreen</font><font color="00FA9A"><font color="#000000">,</font></font><font color="7FFFD4"> 
+            <font color="#7FFFD4">aquamarine</font><font color="#000000">,</font></font><font color="FF1493"> 
+            <font color="#FF1493">deeppink</font><font color="#000000">,</font></font> 
+            magenta</font><font color="#000000">,</font> <font color="#A020F0">purple</font><font color="#000000">,</font> 
+            <font color="#8B008B">darkmagenta<font color="#000000">,</font></font><font color="#8A2BE2"> 
+            blueviolet<font color="#000000">,</font> </font><font color="#EE82EE">violet</font>, 
+            <font color="#FFA500">orange</font>, <font color="#FF0000">red</font>, 
+            <font color="#FF4500">redorange</font>, <font color="#CD5C5C">indianred<font color="#000000">,</font></font><font color="#FFA07A"> 
+            lightsalmon<font color="#000000">,</font></font> <font color="#D2B48C">tan</font>, 
+            <font color="#DEB887">burlywood</font><font color="#A0522D">, sienna</font>, 
+            <font color="#808080">gray</font>, white, and black.</font></p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">HTML binhex and 
+            RGB triplet codes are similar in that the colors are made up of alphanumerical 
+            values for <font color="#FF0000">red</font> <font color="#00FF00">green</font> 
+            and <font color="#0000FF">blue</font>. For binhex, the highest value 
+            is FF and the lowest is 00 (zeros, not O's). For RGB, the highest 
+            value is 255 and the lowest is 0. The format for binhex in Jmol is 
+            [x(Red)(Green)(Blue)], e.g. &quot;color [x<font color="#ff0088">FF0088</font>]&quot;. 
+            The format for RGB triplet codes in Jmol is [(Red),(Green),(Blue)], 
+            e.g. &quot;color [<font color="#FF00FF">255,0,255</font>]&quot;.</font></p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">Default coloration 
+            is CPK (Corey, Pauling, Kultun), based on atom identity. Carbon is 
+            colored <font color="#999999">light gray</font>, oxygen <font color="#FF0000">red</font>, 
+            hydrogen white, nitrogen <font color="#9999FF">light blue</font>, 
+            sulfur <font color="#FFCC33">yellow</font>, phosphorous <font color="#CC6600">orange</font>, 
+            chlorine <font color="#00FF00">green</font>, zinc <font color="#996633">brown</font>, 
+            sodium <font color="#0000FF">blue</font>, iron <font color="#9900CC">purple</font>, 
+            calcium or metals <font color="#666666">dark gray</font>, and unknown 
+            <font color="#FF66FF">deep pink</font>. In addition to CPK, Jmol has 
+            access to some additional predefined color schemes (not all schemes 
+            are discussed here):</font></p>
+          
+            <p><font face="Arial, Helvetica, sans-serif" size="2"> </font></p>
+            <p><font face="Arial, Helvetica, sans-serif" size="2"> 
+              <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit; zap;load t7oxy.pdb; zoom 85; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; select all; spacefill; color amino; select hoh; spacefill off', "", false );
+        </script>
+              &quot;Amino&quot; is a scheme that assigns colors to amino acids 
+              based on their chemical properties, e.g. acidic, basic, hydrophobic, 
+              or polar. The colors are <font color="#E60A0A">ASP<font color="#FFFFFF">, 
+              </font> GLU</font>,<font color="#E6E600"> CYS<font color="#FFFFFF">,</font> 
+              MET<font color="#FFFFFF">,</font><font color="#145AFF"> </font></font></font><font color="#145AFF" face="Arial, Helvetica, sans-serif" size="2">LYS<font color="#FFFFFF">,</font> 
+              ARG</font><font face="Arial, Helvetica, sans-serif" size="2">, <font color="#FA9600">SER<font color="#FFFFFF">,</font> 
+              THR</font>, <font color="#3232AA">PHE<font color="#FFFFFF">,</font> 
+              TYR</font>, <font color="#00DCDC">ASN, GLN</font>, <font color="#EBEBEB">GLY,</font></font> 
+              <font color="#0F820F" face="Arial, Helvetica, sans-serif" size="2">LEU<font color="#FFFFFF">,</font> 
+              VAL<font color="#FFFFFF">,</font> ILE</font><font face="Arial, Helvetica, sans-serif" size="2">,<font color="#C8C8C8"> 
+              ALA</font></font><font color="#FFFFFF" face="Arial, Helvetica, sans-serif" size="2">,</font><font color="#B45AB4" face="Arial, Helvetica, sans-serif" size="2"> 
+              TRP</font><font face="Arial, Helvetica, sans-serif" size="2">, <font color="#8282D2">HIS 
+              </font>and <font color="#DC9682">PRO<font color="#000000">.</font></font></font> 
+              <font color="#CC9933" size="2" face="Arial, Helvetica, sans-serif">Nucleic 
+              acids</font><font size="2" face="Arial, Helvetica, sans-serif"> 
+              are colored tan in the &quot;amino&quot; scheme.</font> </p>
+            
+          <font face="Arial, Helvetica, sans-serif" size="2"> 
+          <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load t7oxy.pdb; zoom 85; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; select protein; cartoons; select nucleic; spacefill; select all; color chain; select hoh; spacefill off", "", false );
+        </script>
+          </font><font face="Arial, Helvetica, sans-serif" size="2">&quot;Chain&quot; 
+          is a scheme that colors each different chain in a multiple molecule 
+          pdb file a different color. </font> 
+          <p><font face="Arial, Helvetica, sans-serif" size="2"> 
+            <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load t7oxy.pdb; zoom 85; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; restrict :a; trace 100; select all; color group", "", false );
+        </script>
+            </font><font face="Arial, Helvetica, sans-serif" size="2">&quot;Group&quot; 
+            is a scheme that colors protein chains differentially in the <font color="#0000FF">amino</font>-<font color="#FF0000">carboxy</font> 
+            direction.</font></p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2"> 
+            <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load t7oxy.pdb; zoom 85; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; restrict nucleic; trace 100; select all; color group", "", false );
+        </script>
+            </font><font face="Arial, Helvetica, sans-serif" size="2">&quot;Group&quot; 
+            colors nucleic acid chains differentially in the <font color="#0000FF">5'</font>&gt;<font color="#FF0000">3'</font> 
+            direction.</font></p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2"> 
+            <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load t7oxy.pdb; zoom 85; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; restrict :a; spacefill; color temperature", "", false );
+        </script>
+            </font><font face="Arial, Helvetica, sans-serif" size="2">&quot;Temperature&quot; 
+            is a scheme that colors atoms according to their anisotropic temperatures, 
+            as stored as a beta value in a pdb file. Anisotropic temperature is 
+            indicative of of an atom's mobility or uncertainty of position. The 
+            more mobile, &quot;warmer&quot; segments are colored <font color="#FF0000">red</font>, 
+            progressing to more immobile <font color="#0000FF">blue</font> fragments.</font></p>
+          
+            
+          <p><font face="Arial, Helvetica, sans-serif" size="2"> 
+            <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load t7oxy.pdb; zoom 85; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; restrict protein; cartoons; color structure", "", false );
+        </script>
+            </font><font face="Arial, Helvetica, sans-serif" size="2">&quot;Structure&quot; 
+            is a very useful color scheme in that it differentially colors a protein's 
+            secondary structure (<font color="#FF0080" face="Symbol">a</font></font><font color="#FF0080" face="Arial, Helvetica, sans-serif" size="2">-helices<font color="#000000"> 
+            and </font><font color="#FFFFFF"><font color="#FFCC33" face="Symbol">b-</font><font color="#FFCC33">sheets</font></font></font><font face="Arial, Helvetica, sans-serif" size="2">). 
+            It is best to use a display command that illustrates secondary structure 
+            when using the structure color scheme (e.g. ribbons, cartoon, backbone, 
+            trace, or strands - see <a href="#II" target="_self">Display</a> section). 
+            </font></p>
+          
+            <p><font face="Arial, Helvetica, sans-serif" size="2">It is quite effective 
+            to use consistent color schemes to show some molecular features.</font> 
+            <font color="#000000" face="Arial, Helvetica, sans-serif" size="2">DRuMS 
+            is a set of seven color schemes that provides a uniform standard for 
+            coloration in molecular exhibits. The colors used in the basic DRuMS 
+            scheme are: </font><font color="#FFFFFF" face="Arial, Helvetica, sans-serif" size="2"><font color="#CBBE8A">protein</font><font color="#000000">, 
+            </font><font color="#AE00FE">DNA</font><font color="#000000">, </font><font color="#FD0162">RNA</font><font color="#000000">, 
+            </font><font color="#FF0080" face="Symbol">a-</font><font color="#FF0080">helix</font><font color="#000000"> 
+            and </font><font color="#FFCC33" face="Symbol">b-</font><font color="#FFCC33">sheet</font><font color="#000000">. 
+            For amino acids the DRuMS colors are: </font><font color="#919191">hydrophobic 
+            amino acids</font>, <font color="#FF0000">polar acidic amino acids</font>, 
+            <font color="#3366FF">polar basic amino acids</font>, <font color="#000000">and 
+            </font><font color="#FF33FF">polar uncharged amino acids</font>.<font color="#000000"> 
+            See the DRuMS website for further information:</font></font> </p>
+          <p align="center"><font color="#000000" face="Arial, Helvetica, sans-serif" size="2"><a href="http://www.umass.edu/molvis/drums/" target="_blank"><img src="../images/drumslogo.gif" width="85" height="28" border="0"/></a> 
+            </font> </p>
+          <p align="left"><font face="Arial, Helvetica, sans-serif" size="2" color="#000000">It 
+            is sometimes necessary to go beyond the DRuMS schemes to illustrate 
+            important structural features. For example, it may be useful to distinguish 
+            between several pairs of chemically similar amino acids engaged in 
+            ionic bonding. In this case, custom colors must be used to indicate 
+            molecular identity. Fortunately, it is easy to instruct Jmol to read 
+            any </font><font face="Arial, Helvetica, sans-serif" size="2">user-specified 
+            color code.</font> </p>
+          <p align="left"><font size="2" face="Arial, Helvetica, sans-serif">More 
+            information on color options is available on the <a href="http://jmol.sourceforge.net/jscolors/" target="_blank">Jmol 
+            colors page</a>.</font></p>
+          <p align="center"><font face="Arial, Helvetica, sans-serif" size="3" color="#000000"><b>Sample 
+            Coloring Commands</b></font></p>
+          <table width="100%" border="1">
+            <tr> 
+              <td width="56%"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"><b>Buttons/Effects</b><br />
+                code for buttons = <br />
+                &lt;script language=&quot;JavaScript&quot; type=&quot;text/javascript&quot;&gt;<br />
+                jmolRadio('!quit; zap;<font color="#3366CC">Jmol scripts here</font>', &quot;&quot;, 
+                false );<br />
+                &lt;/script&gt;</font></td>
+              <td><p align="left"><font face="Arial, Helvetica, sans-serif" size="2" color="#3366CC"><b>relevant 
+                  Jmol scripts in buttons (the scripts below are often supplemented 
+                  by commands that orient molecules and change default displays 
+                  - see NB, above)<br />
+                  <br />
+                  </b><font color="#000000">Place between ' ' in button code </font></font></p></td>
+            </tr>
+            <tr> 
+              <td height="56">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load t7oxy.pdb; zoom 85; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; select protein; cartoons; color deepskyblue; select nucleic; spacefill; color cpk", "", false );
+        </script>
+                display protein in deepskyblue cartoons, nucleic acid in CPK default 
+                coloration and spacefill</font></td>
+              <td>select protein; cartoons; color deepskyblue; select nucleic; 
+                spacefill; color cpk;</td>
+            </tr>
+            <tr> 
+              <td>&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load t7oxy.pdb; zoom 85; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; select protein; cartoons; color [xFF00FF]; select nucleic; spacefill; color [xFFFF00]", "", false );
+        </script>
+                display protein in magenta cartoons, nucleic acid in yellow spacefill 
+                using HTML binhex</font></td>
+              <td>select protein; cartoons; color [xFF00FF]; select nucleic; spacefill; 
+                color [xFFFF00];</td>
+            </tr>
+            <tr> 
+              <td><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load t7oxy.pdb; zoom 85; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; select protein; cartoons; color [0,0,255]; select nucleic; spacefill; color [255,255,0];", "", false );
+            </script>
+                display protein in blue cartoons, nucleic acid in yellow spacefill 
+                using RGB</font></td>
+              <td>select protein; cartoons; color [0,0,255]; select nucleic; spacefill; 
+                color [255,255,0];</td>
+            </tr>
+            <tr> 
+              <td><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load t7oxy.pdb; zoom 85; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; select all; spacefill; color amino; select hoh; spacefill off", "", false );
+            </script>
+                display DNA and protein in &quot;amino&quot; scheme</font></td>
+              <td>select all; color amino;</td>
+            </tr>
+            <tr> 
+              <td>&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load t7oxy.pdb; zoom 85; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; select protein; cartoons; select nucleic; spacefill; select all; color chain; select hoh; spacefill off", "", false );
+        </script>
+                display protein in cartoons, DNA in spacefill, color chains differentially</font></td>
+              <td>select protein; cartoons; select nucleic; spacefill; select 
+                all; color chain;</td>
+            </tr>
+            <tr> 
+              <td>&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load t7oxy.pdb; zoom 85; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; restrict :a; trace 100; select all; color group", "", false );
+        </script>
+                display one protein chain in trace, color in &quot;group&quot; 
+                scheme </font></td>
+              <td>restrict :a; trace 100; select all; color group;</td>
+            </tr>
+            <tr> 
+              <td><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load t7oxy.pdb; zoom 85; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; restrict :a; spacefill; color temperature", "", false );
+            </script>
+                display one protein chain in spacefill, color in &quot;temperature&quot; 
+                scheme </font></td>
+              <td>restrict :a; spacefill; color temperature</td>
+            </tr>
+            <tr> 
+              <td height="56"><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load t7oxy.pdb; zoom 85; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; backbone off; cartoons off; label off; monitor off; restrict protein; cartoons; color structure", "", false );
+            </script>
+                display protein in cartoons, color in &quot;structure&quot; scheme</font></td>
+              <td>restrict protein; cartoons; color structure;</td>
+            </tr>
+          </table>
+          <p align="center"><font face="Arial, Helvetica, sans-serif" size="4"><a href="#top" target="_self">return 
+            to beginning of exhibit</a></font> <font size="4" face="Arial, Helvetica, sans-serif"><a href="#intro" target="_self"><a name="VI" id="VI"></a></a></font></p>
+          <p align="center"><font size="4" face="Arial, Helvetica, sans-serif"><a href="#intro" target="_self"><font color="#0000FF" size="1">[Introduction]</font></a><font color="#0000FF" size="1"> 
+            <a href="#II">[II. Display]</a> <a href="#iii" target="_self">[III. 
+            Loading and Positioning]</a> <a href="#IV">[IV. Selecting and Labeling]</a> 
+            <a href="#V"><br />
+            [V. Coloring and Schemes]</a> <a href="#VI">[VI. Illustrating Bonds]</a> 
+            <a href="#VII">[VII. Animation]</a></font></font></p>
+          <hr /> <hr /> <h4><font size="4" face="Arial, Helvetica, sans-serif">VI. 
+            Illustrating Bonds</font></h4>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">Jmol recognizes 
+            by default the standard covalent bonds linking atoms in a molecule. 
+            Disulfide (S-S) bonds can also be displayed in Jmol by the use of 
+            the &quot;ssbonds&quot; command. The color of the bond is that of 
+            the two linked atoms, but it can be changed with the &quot;color ssbonds&quot; 
+            command. Similarly, &quot;hbonds&quot; and &quot;color hbonds&quot; 
+            tells Chime to show and color hydrogen bonds that are identified by 
+            Jmol. </font></p>
+          <p align="left"><font face="Arial, Helvetica, sans-serif" size="2">You 
+            may wish to illustrate a connection or bond that is not specified 
+            in a pdb file or read by Jmol. Although not ideal, such arbitrary 
+            bonds can be indicated using the &quot;monitor&quot; command. &quot;Monitor&quot; 
+            forms a dashed line between any two specified atoms and indicates 
+            the distance (in &Aring;) between them. The distance display can be 
+            removed by &quot;set monitor off,&quot; and the color and thickness 
+            of the displayed bond can be varied.</font></p>
+          <p align="left"><font size="2" face="Arial, Helvetica, sans-serif">The 
+            Jmol development team has recently added superior capabilities to 
+            illustrate bonds between any desired atoms using the &quot;select&quot; 
+            and &quot;connect&quot; commands. Also added is the capability to 
+            designate the bond order (single, double, etc.) with, e.g., &quot;connect 
+            double&quot;. It is now possible to delete bonds between any chosen 
+            atoms using &quot;connect delete&quot;.</font></p>
+          <p align="center"><font face="Arial, Helvetica, sans-serif" size="3" color="#000000"><b>Sample 
+            Bond Commands</b></font></p>
+          <table width="100%" border="1">
+            <tr> 
+              <td width="56%"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"><b>Buttons/Effects</b><br />
+                code for buttons = <br />
+                &lt;script language=&quot;JavaScript&quot; type=&quot;text/javascript&quot;&gt;<br />
+                jmolRadio('!quit; zap;<font color="#3366CC">Jmol scripts here</font>', &quot;&quot;, 
+                false );;<br />
+                &lt;/script&gt;</font></td>
+              <td><p align="left"><font face="Arial, Helvetica, sans-serif" size="2" color="#3366CC"><b>relevant 
+                  Jmol scripts in buttons (the scripts below are often supplemented 
+                  by commands that orient molecules and change default displays 
+                  - see NB, above)</b></font></p>
+                <p align="left"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">Place 
+                  between ' ' in button code</font></p></td>
+            </tr>
+            <tr> 
+              <td width="56%"><font face="Arial, Helvetica, sans-serif" size="2"> 
+                &nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1acx.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 90; rotate y -120;  select all; trace 40; select hoh; wireframe off; spacefill off; select cys; wireframe 80; ssbonds 1; ssbonds 0; ssbonds off;", "", false );
+            </script>
+                display protein backbone in trace, cys residues in wireframe</font></td>
+              <td>select protein; trace 40; select cys; wireframe 80;</td>
+            </tr>
+            <tr> 
+              <td width="56%"><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1acx.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 90; rotate y -120;  select all; trace 40; select hoh; wireframe off; spacefill off; select cys; wireframe 80; ssbonds 1; ssbonds 0; ssbonds off; select cys; ssbonds on; ssbonds 40;", "", false );
+            </script>
+                display protein backbone in trace, cys residues in wireframe, 
+                show S-S bonds</font></td>
+              <td>select protein; trace 40; select cys; wireframe 80; ssbonds 
+                40; </td>
+            </tr>
+            <tr> 
+              <td width="56%" height="82"><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1acx.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 90; rotate y -120;  select all; trace 40; select hoh; wireframe off; spacefill off; select cys; wireframe 80; ssbonds 1; ssbonds 0; ssbonds off; select cys; ssbonds on; ssbonds 80; color ssbonds purple", "", false );
+            </script>
+                display protein backbone in trace, cys residues in wireframe, 
+                color S-S bonds purple, thicken S-S bonds</font></td>
+              <td>select protein; trace 40; select cys; wireframe 80; ssbonds 
+                80; color ssbonds purple;</td>
+            </tr>
+            <tr> 
+              <td width="56%" height="30"><p><font face="Arial, Helvetica, sans-serif" size="2"> 
+                  &nbsp; 
+                  <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1acx.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 90; rotate y -120;  select all; trace 40; select hoh; wireframe off; spacefill off; select cys; wireframe 80; ssbonds 1; ssbonds off;", "", false );
+              </script>
+                  remove S-S bonds</font></p></td>
+              <td>select protein; trace 40; select cys; wireframe 80; ssbonds 
+                1; ssbonds off; </td>
+            </tr>
+            <tr> 
+              <td width="56%"><font face="Arial, Helvetica, sans-serif" size="2"> 
+                &nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1acx.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 90; rotate y -120;  select all; trace 40; select hoh; wireframe off; spacefill off; select all; wireframe 40; select cys; ssbonds 1; ssbonds off; monitor 500 199", "", false );
+            </script>
+                make an arbitrary bond between two atoms of choice (#500 and #199), 
+                showing distance between them, using the monitor option</font></td>
+              <td>select all; wireframe 40; monitor 500 199;</td>
+            </tr>
+            <tr> 
+              <td width="56%"><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1acx.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 90; rotate y -120;  select all; trace 40; select hoh; wireframe off; spacefill off; select all; wireframe 40; select cys; ssbonds 1; ssbonds off; monitor 500 199; set monitor off", "", false );
+            </script>
+                remove distance label of arbitrary bond</font></td>
+              <td>select all; wireframe 40; monitor 500 199; set monitor off;</td>
+            </tr>
+            <tr> 
+              <td width="56%">&nbsp;<font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1acx.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 90; rotate y -120;  select all; trace 40; select hoh; wireframe off; spacefill off; select all; wireframe 40; select cys; ssbonds 1; ssbonds off; monitor 500 199; set monitor off; set monitor 5; color monitor violet", "", false );
+        </script>
+                display arbitrary monitor bond with thicker line, color bond violet</font></td>
+              <td>select all; wireframe 40; monitor 500 199; set monitor off; 
+                set monitor 5; color monitor violet;</td>
+            </tr>
+            <tr> 
+              <td width="56%"><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1acx.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 90; rotate y -120;  select all; trace 40; select hoh; wireframe off; spacefill off; select all; wireframe 40; select cys; ssbonds 1; ssbonds off; monitor 500 199; set monitor off; set monitor 5; color monitor violet; delay 1; monitor off", "", false );
+            </script>
+                remove arbitrary bond</font></td>
+              <td>monitor off;</td>
+            </tr>
+            <tr> 
+              <td width="56%" height="20"><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1acx.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 90; rotate y -120;  select all; trace 40; select hoh; wireframe off; spacefill off; select all; wireframe 40; select atomno=500, atomno=199; connect single", "", false );
+            </script>
+                make an arbitrary bond between two atoms of choice (#500 and #199), 
+                using connect option</font></td>
+              <td height="20">select atomno=500, atomno=199; connect single;</td>
+            </tr>
+            <tr> 
+              <td width="56%"><p><font face="Arial, Helvetica, sans-serif" size="2"> 
+                  &nbsp; 
+                  <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1acx.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 90; rotate y -120;  select all; trace 40; select hoh; wireframe off; spacefill off; select all; wireframe 40; select atomno=500, atomno=199; connect single; delay 1; connect delete", "", false );
+              </script>
+                  remove arbitrary bond between two atoms of choice (#500 and 
+                  #199), using connect option</font></p></td>
+              <td>select atomno=500, atomno=199; connect delete;</td>
+            </tr>
+            <tr> 
+              <td width="56%"><font face="Arial, Helvetica, sans-serif" size="2"> 
+                &nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load 1acx.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 90; rotate y -120;  select all; trace 40; select hoh; wireframe off; spacefill off; select all; wireframe 40; select atomno=292, atomno=295; spacefill; delay .5; spacefill off; delay .5; spacefill; delay .5; spacefill off; delay .5; connect delete", "", false );
+            </script>
+                remove designated bond between two atoms of choice (#292 and #295), 
+                using connect delete</font></td>
+              <td>select atomno=292, atomno=295; spacefill; delay .5; spacefill 
+                off; delay .5; spacefill; delay .5; spacefill off; delay .5; connect 
+                delete;</td>
+            </tr>
+            <tr> 
+              <td><font size="2" face="Arial, Helvetica, sans-serif"> &nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load bdna2.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; move 180 0 0 0 0 0 0 0 .1; move -50 -85.60 -60 15 0 0 0 0 .5;  select all; color cpk; wireframe 80; select hoh; wireframe off; spacefill off; select all; hbonds", "", false );
+            </script>
+                display B-DNA, show hydrogen bonds between base pairs</font></td>
+              <td>load bdna2.pdb; hbonds;</td>
+            </tr>
+            <tr> 
+              <td><font face="Arial, Helvetica, sans-serif" size="2"> &nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load bdna2.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; move 180 0 0 0 0 0 0 0 .1; move -50 -85.60 -60 15 0 0 0 0 .5;  select all; color cpk; wireframe 80; select hoh; wireframe off; spacefill off; select all; hbonds; hbonds 30; color hbonds magenta", "", false );
+            </script>
+                color hydrogen bonds magenta, thicken hbonds</font></td>
+              <td>hbonds 50; color hbonds magenta;</td>
+            </tr>
+            <tr> 
+              <td><font face="Arial, Helvetica, sans-serif" size="2"> &nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load bdna2.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; move 180 0 0 0 0 0 0 0 .1; move -50 -85.60 -60 15 0 0 0 0 .5;  select all; color cpk; wireframe 80; select hoh; wireframe off; spacefill off; select all; hbonds off", "", false );
+            </script>
+                remove hydrogen bonds</font></td>
+              <td>hbonds off;</td>
+            </tr>
+          </table>
+          <p align="center"><font face="Arial, Helvetica, sans-serif" size="4"><a href="#top" target="_self">return 
+            to beginning of exhibit</a></font> <font size="4" face="Arial, Helvetica, sans-serif"><a href="#intro" target="_self"><a name="VII" id="VII"></a></a></font></p>
+          <p align="center"><font size="4" face="Arial, Helvetica, sans-serif"><a href="#intro" target="_self"><font color="#0000FF" size="1">[Introduction]</font></a><font color="#0000FF" size="1"> 
+            <a href="#II">[II. Display]</a> <a href="#iii" target="_self">[III. 
+            Loading and Positioning]</a> <a href="#IV">[IV. Selecting and Labeling]</a> 
+            <a href="#V"><br />
+            [V. Coloring and Schemes]</a> <a href="#VI">[VI. Illustrating Bonds]</a> 
+            <a href="#VII">[VII. Animation]</a></font></font></p>
+          <hr /> <hr /> <h4><font size="4" face="Arial, Helvetica, sans-serif">VII. 
+            Animation </font></h4>
+          <p align="left"><font face="Arial, Helvetica, sans-serif" size="2">Animations 
+            are sometimes superior to the rotations and translations discussed 
+            previously because animations can cause the molecule at hand to move 
+            or change position in a smooth fashion. Coupled with creative displays 
+            and coloration, animation commands can be employed to great effect 
+            in illustrating key points of molecular structure.</font></p>
+          <p align="left"><font face="Arial, Helvetica, sans-serif" size="2">One 
+            of the most useful animation commands is &quot;move.&quot; &quot;Move&quot; 
+            is followed by a set of numbers that quantify a set of animation parameters. 
+            Here we describe the use of the first nine such parameters, i.e.: 
+            &quot;move _ _ _ _ _ _ _ _ _ &quot;, where each of the nine spaces 
+            contains a number that specifies the degree of an animation parameter. 
+            </font><font face="Arial, Helvetica, sans-serif" size="2">The parameters 
+            for each space following a &quot;move&quot; command (in order) are:</font> 
+          </p>
+          <table width="75%" border="1" align="center">
+            <tr> 
+              <td><font size="2" face="Arial, Helvetica, sans-serif"> 1</font> 
+              </td>
+              <td><font size="2" face="Arial, Helvetica, sans-serif">2</font> 
+              </td>
+              <td><font size="2" face="Arial, Helvetica, sans-serif">3</font></td>
+              <td><font size="2" face="Arial, Helvetica, sans-serif">4</font></td>
+              <td><font size="2" face="Arial, Helvetica, sans-serif">5</font></td>
+              <td><font size="2" face="Arial, Helvetica, sans-serif">6</font></td>
+              <td><font size="2" face="Arial, Helvetica, sans-serif">7</font></td>
+              <td><font size="2" face="Arial, Helvetica, sans-serif">8</font></td>
+              <td><font size="2" face="Arial, Helvetica, sans-serif">9</font></td>
+            </tr>
+            <tr> 
+              <td><font face="Arial, Helvetica, sans-serif" size="2">Xrot</font></td>
+              <td><font face="Arial, Helvetica, sans-serif" size="2">YRot</font></td>
+              <td><font face="Arial, Helvetica, sans-serif" size="2">ZRot</font></td>
+              <td><font face="Arial, Helvetica, sans-serif" size="2">Zoom</font></td>
+              <td><font face="Arial, Helvetica, sans-serif" size="2">XTrans</font></td>
+              <td><font face="Arial, Helvetica, sans-serif" size="2">YTrans</font></td>
+              <td><font face="Arial, Helvetica, sans-serif" size="2">ZTrans</font></td>
+              <td><font face="Arial, Helvetica, sans-serif" size="2">Slab</font></td>
+              <td><font face="Arial, Helvetica, sans-serif" size="2">TotalTime</font></td>
+            </tr>
+          </table>
+          <p><br />
+            <font face="Arial, Helvetica, sans-serif" size="2">The first three 
+            parameters are rotations around the X, Y and Z axes. Fourth is the 
+            zoom modifier, expressed in positive (zoom in) or negative (zoom out) 
+            numbers. Note that in a &quot;move&quot; command, zoom values are 
+            not expressed in percentages of the original, unlike the use of &quot;zoom&quot; 
+            as a stand alone script command. The next three parameters (5,6 and 
+            7) deal with translation along the three axes (7, Z translation, is 
+            not functional - always use zero in that slot). Note: contrary to 
+            intuition, positive numbers for Y translation move molecules down 
+            and negative numbers move molecules up. 8th is the slab parameter. 
+            Slab &quot;slices&quot; the molecule, i.e. removes atoms down to a 
+            specified depth so that interior features may be easily observed. 
+            Parameter 9 is the amount of time (in seconds) to take in performing 
+            the previous move commands. It is important to allow sufficient time 
+            for the animation so as not to disorient the viewer. Contrariwise, 
+            too long an animation can prove tedious. There are two other move 
+            parameters, Frames/Second and MaximumAcceleration that can be specified 
+            in the 10th and 11th positions (not considered here).</font> </p>
+          <p><font size="2" face="Arial, Helvetica, sans-serif">So, &quot;move 
+            0 360 0 200 0 15 0 0 6&quot; would, in 6 seconds, rotate a molecule 
+            360 degrees around the Y axis, while simultaneously zooming (200) 
+            and moving the molecule down (Y axis translation: +15). &quot;Move&quot; 
+            is used in some of Jmol's most impressive animations and provides 
+            great versatility, especially when coupled with &quot;delay.&quot; 
+            </font></p>
+          <p><font size="2" face="Arial, Helvetica, sans-serif">&quot;Delay&quot; 
+            pauses the Jmol script for a specified amount of time before the next 
+            command is executed. &quot;Delay&quot; is specified in seconds, e.g. 
+            &quot;delay 5&quot; causes a pause of five seconds. In addition to 
+            use in animations, &quot;delay&quot; can be an effective tool in a 
+            variety of display and coloration contexts.</font></p>
+          <p><font size="2" face="Arial, Helvetica, sans-serif"><strong>Perhaps the most essential animation command is &quot;moveto&quot;. </strong>The &quot;moveto&quot; 
+            command can be used to  rotate a molecule around each axis and to zoom. This command is useful 
+            when using the Jmol Applet to determine the best viewing orientation 
+            of a molecule. After adjusting the orientation of a molecule, Use the &quot;show orientation&quot; command in the applet scripting window to display the appropriate &quot;moveto&quot; command to elicit a particular orientation of choice. Then use this &quot;moveto&quot; command in your button scripts as needed. For more information on &quot;moveto&quot;, see the <a href="http://chemapps.stolaf.edu/jmol/docs/?ver=11.4#moveto" target="_blank">Jmol Interactive Scripting documentation</a>. </font></p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">The &quot;spin&quot; 
+            command evokes a continuous animation. Before using &quot;spin&quot;, 
+            use &quot;set spin X/Y/Z _&quot; to define the axis of rotation and 
+            the speed (degrees/second) of rotation. To adjust the smoothness of 
+            rotation (usually not necessary), use </font><font face="Arial, Helvetica, sans-serif" size="2"> &quot;set spin FPS _&quot;, where the blank is an integer that specifies 
+            frames/second. Caution must be used in spinning a molecule because 
+            when later &quot;move&quot; commands are executed, they will take 
+            effect from whatever arbitrary position the molecule happens to be 
+            in (spinning). This can be acceptable, but can also muddy a point 
+          because the molecule will not be oriented correctly. &quot;spin off&quot; turns off spinning.</font> </p>
+          <p align="left"><font face="Arial, Helvetica, sans-serif" size="2">Changes 
+            in display (e.g. wireframe thickness, spacefill radii), separated 
+            by brief delays, can be used to &quot;build up&quot; or &quot;dissolve&quot; 
+            molecules to provide smooth transitions in rendering.</font></p>
+          <p><font face="Arial, Helvetica, sans-serif" size="2">Blinking can be 
+            used to draw attention to particular molecular features (e.g. bonding 
+            partners). Blinking is achieved by causing the feature to flash on 
+            and off or to expand and contract a few times, using appropriate display 
+            commands separated by delays.</font></p>
+          <p><font size="2" face="Arial, Helvetica, sans-serif">The &quot;loop&quot; 
+            command can be used to repeat a particular animation script (or any 
+            other script) until another command is invoked. &quot;loop 3&quot; 
+            indicates the previous script commands will be repeated after a 3 
+            second delay.</font></p>
+          <p align="center"><font face="Arial, Helvetica, sans-serif" size="3" color="#000000"><b>Sample 
+            Animation Commands</b></font> </p>
+          <table width="100%" border="1">
+            <tr> 
+              <td width="56%" height="120"><font color="#000000" size="2" face="Arial, Helvetica, sans-serif"><b>Buttons/Effects</b><br />
+                code for buttons = <br />
+                &lt;script language=&quot;JavaScript&quot; type=&quot;text/javascript&quot;&gt;<br />
+                jmolRadio('!quit; zap;<font color="#3366CC">Jmol scripts here</font>', &quot;&quot;, 
+                false );<br />
+                &lt;/script&gt;</font></td>
+              <td><p align="left"><font face="Arial, Helvetica, sans-serif" size="2" color="#3366CC"><b>relevant 
+                  Jmol scripts in buttons (the scripts below are often supplemented 
+                  by commands that orient molecules and change default displays 
+                  - see NB, above)<br />
+                  <br />
+                  </b> <font color="#000000">Place between ' ' in button code 
+                  </font></font></p></td>
+            </tr>
+            <tr> 
+              <td width="56%" height="82"><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit; zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; color turquoise; cartoons; move 90 0 0 0 0 0 0 0 3; delay 1; move -90 0 0 0 0 0 0 0 3; #####;' , "", false );
+            </script>
+                display molecule in tuquoise cartoons, rotate 90&ordm; around 
+                X axis in 3 seconds, pause for 1 second, rotate back in 3 seconds
+              </font></td>
+              <td>select all; color turquoise; cartoons; move 90 0 0 0 0 0 0 0 
+                3; delay 1; move -90 0 0 0 0 0 0 0 3; </td>
+            </tr>
+            <tr> 
+              <td width="56%" height="75"><p><font face="Arial, Helvetica, sans-serif" size="2"> 
+                  &nbsp; 
+                  <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; color turquoise; cartoons; move 0 90 0 0 0 0 0 0 3; delay 1; move 0 -90 0 0 0 0 0 0 3;", "", false );
+              </script>
+                  display molecule in tuquoise cartoons, rotate 90&ordm; around 
+                  Y axis in 3 seconds, pause for 1 second, rotate back in 3 seconds</font></p></td>
+              <td>select all; color turquoise; cartoons; move 0 90 0 0 0 0 0 0 
+                3; delay 1; move 0 -90 0 0 0 0 0 0 3;</td>
+            </tr>
+            <tr> 
+              <td width="56%"><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; color turquoise; cartoons; move 0 0 90 0 0 0 0 0 3; delay 1; move 0 0 -90 0 0 0 0 0 3;", "", false );
+            </script>
+                display molecule in tuquoise cartoons, rotate 90&ordm; around 
+                Z axis in 3 seconds, pause for 1 second, rotate back in 3 seconds</font></td>
+              <td>select all; color turquoise; cartoons; move 0 0 90 0 0 0 0 0 
+                3; delay 1; move 0 0 -90 0 0 0 0 0 3;</td>
+            </tr>
+            <tr> 
+              <td width="56%"><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; color cpk; wireframe 80; move 0 0 0 100 0 0 0 0 3; delay 1; move 0 0 0 -100 0 0 0 0 3;", "", false );
+            </script>
+                display molecule in CPK wireframe, zoom in (100) in 3 seconds, 
+                pause for 1 second, zoom out in 3 seconds</font></td>
+              <td>select all; color cpk; wireframe 80; move 0 0 0 100 0 0 0 0 
+                5; delay 2; move 0 0 0 -100 0 0 0 0 5;</td>
+            </tr>
+            <tr> 
+              <td width="56%"><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; color cpk; wireframe 80; move 0 0 0 0 25 0 0 0 3; delay 1; move 0 0 0 0 -25 0 0 0 3;", "", false );
+            </script>
+                display molecule in CPK wireframe, translate X (25), pause for 
+                a second, translate back</font></td>
+              <td>select all; color cpk; wireframe 80; move 0 0 0 0 25 0 0 0 5; 
+                delay 1; move 0 0 0 0 -25 0 0 0 5;</td>
+            </tr>
+            <tr> 
+              <td width="56%"><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; color cpk; wireframe 80; move 0 0 0 0 0 25 0 0 3; delay 1; move 0 0 0 0 0 -25 0 0 3;", "", false );
+            </script>
+                display molecule in CPK wireframe, translate Y (25), pause for 
+                a second, translate back</font></td>
+              <td>move 0 0 0 0 0 25 0 0 5; delay 1; move 0 0 0 0 0 -25 0 0 5;</td>
+            </tr>
+            <tr> 
+              <td width="56%"><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit; zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; color indianred; cartoons; select cro; color mediumspringgreen; spacefill; delay 2; slab on; slab 60; delay 1; move 90 0 0 0 0 0 0 0 4; slab off; #####; ', "", false );
+            </script>
+                display protein in indianred cartoons, chromophore in mediumspringgreen 
+                spacefill, cut away 40% of molecule to show chromophore, rotate 
+                90&ordm; on X axis in 4 seconds, restore all atoms</font></td>
+              <td>select all; color indianred; cartoons; select cro; color mediumspringgreen; 
+                spacefill; delay 2; slab on; slab 60; delay 1; move 90 0 0 0 0 
+                0 0 0 4; delay 1; slab off; </td>
+            </tr>
+            <tr> 
+              <td width="56%"><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; color indianred; cartoons; select cro; color mediumspringgreen; spacefill; delay 2; slab on; slab 60; delay 1; set spin y 20; spin", "", false );
+            </script>
+                display protein in indianred cartoons, chromophore in mediumspringgreen 
+                spacefill, cut away 40% of molecule to show the chromophore in 
+                the interior, spin molecule on y axis (20&ordm;/second)</font></td>
+              <td><p>select all; color indianred; cartoons; select cro; color 
+                  mediumspringgreen; spacefill; delay 2; slab on; slab 60; delay 
+                  1; set spin y 20; spin</p></td>
+            </tr>
+            <tr> 
+              <td width="56%" height="264"><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; color cpk; select all; wireframe; delay .1; wireframe 30; spacefill 30; delay .1; spacefill 50; delay .1; spacefill 75; delay .1; spacefill 100; delay .1; spacefill 125; delay .1; spacefill 150; delay .1; spacefill 175; delay .1; spacefill 200; delay .1; spacefill 225; delay .1; spacefill 250; delay .1; spacefill 275; delay .1; spacefill 300; delay .1; spacefill 325; delay .1; spacefill 350; delay .1; spacefill 375; delay .1; spacefill 400; delay .1; spacefill", "", false );
+            </script>
+                &quot;build up&quot; a molecule: wireframe to spacefill</font></td>
+              <td>select all; wireframe; delay .1; wireframe 30; spacefill 30; 
+                delay .1; spacefill 50; delay .1; spacefill 75; delay .1; spacefill 
+                100; delay .1; spacefill 125; delay .1; spacefill 150; delay .1; 
+                spacefill 175; delay .1; spacefill 200; delay .1; spacefill 225; 
+                delay .1; spacefill 250; delay .1; spacefill 275; delay .1; spacefill 
+                300; delay .1; spacefill 325; delay .1; spacefill 350; delay .1; 
+                spacefill 375; delay .1; spacefill 400; delay .1; spacefill</td>
+            </tr>
+            <tr> 
+              <td width="56%"><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; color cpk; select all; spacefill; wireframe 30; delay .1; spacefill 400; delay .1; spacefill 375; delay .1; spacefill 350; delay .1; spacefill 325; delay .1; spacefill 300; delay .1; spacefill 275; delay .1; spacefill 250; delay .1; spacefill 200; delay .1; spacefill 175; delay .1; spacefill 150; delay .1; spacefill 125; delay .1; spacefill 100; delay .1; spacefill 75; delay .1; spacefill 50; delay .1; spacefill 30; wireframe 30; delay .1; spacefill off; wireframe", "", false );
+            </script>
+                &quot;dissolve&quot; a molecule: spacefill to wireframe</font></td>
+              <td>select all; spacefill; wireframe 30; delay .1; spacefill 400; 
+                delay .1; spacefill 375; delay .1; spacefill 350; delay .1; spacefill 
+                325; delay .1; spacefill 300; delay .1; spacefill 275; delay .1; 
+                spacefill 250; delay .1; spacefill 200; delay .1; spacefill 175; 
+                delay .1; spacefill 150; delay .1; spacefill 125; delay .1; spacefill 
+                100; delay .1; spacefill 75; delay .1; spacefill 50; delay .1; 
+                spacefill 30; wireframe 30; delay .1; spacefill off; wireframe;</td>
+            </tr>
+            <tr> 
+              <td width="56%" height="73"><font size="2" face="Arial, Helvetica, sans-serif">&nbsp; 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; color cpk; spacefill; select hetero; spacefill off; select cro; color mediumspringgreen; spacefill; delay 2; move 90 0 0 0 0 0 0 0 4; delay 1; select protein; spacefill; wireframe 30; delay .1; spacefill 400; delay .1; spacefill 375; delay .1; spacefill 350; delay .1; spacefill 325; delay .1; spacefill 300; delay .1; spacefill 275; delay .1; spacefill 250; delay .1; spacefill 200; delay .1; spacefill 175; delay .1; spacefill 150; delay .1; spacefill 125; delay .1; spacefill 100; delay .1; spacefill 75; delay .1; spacefill 50; delay .1; spacefill 30; wireframe 30; delay .1; spacefill off; wireframe; delay 1; move -90 0 0 0 0 0 0 0 4; delay 1; set spin y 20; spin", "", false );
+            </script>
+                dissolving to show or emphasize a moiety</font></td>
+              <td height="73"><p>select all; color cpk; spacefill; select hetero; 
+                  spacefill off; select cro; color mediumspringgreen; spacefill; 
+                  delay 2; move 90 0 0 0 0 0 0 0 4; delay 1; select protein; spacefill; 
+                  wireframe 30; delay .1; spacefill 400; delay .1; spacefill 375; 
+                  delay .1; spacefill 350; delay .1; spacefill 325; delay .1; 
+                  spacefill 300; delay .1; spacefill 275; delay .1; spacefill 
+                  250; delay .1; spacefill 200; delay .1; spacefill 175; delay 
+                  .1; spacefill 150; delay .1; spacefill 125; delay .1; spacefill 
+                  100; delay .1; spacefill 75; delay .1; spacefill 50; delay .1; 
+                  spacefill 30; wireframe 30; delay .1; spacefill off; wireframe; 
+                  delay 1; move -90 0 0 0 0 0 0 0 4; delay 1; set spin y 20; spin</p></td>
+            </tr>
+            <tr> 
+              <td height="30"><p><font size="2" face="Arial, Helvetica, sans-serif"> 
+                  &nbsp; 
+                  <script language="JavaScript" type="text/javascript">
+	jmolRadio("!quit;zap;load gfp.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; rotate x 25; rotate z -15; select all; color cpk; spacefill; select hetero; spacefill off; select cro; color mediumspringgreen; spacefill; delay 2; move 90 0 0 0 0 0 0 0 4; delay 1; select protein; spacefill; wireframe 30; delay .1; spacefill 400; delay .1; spacefill 375; delay .1; spacefill 350; delay .1; spacefill 325; delay .1; spacefill 300; delay .1; spacefill 275; delay .1; spacefill 250; delay .1; spacefill 200; delay .1; spacefill 175; delay .1; spacefill 150; delay .1; spacefill 125; delay .1; spacefill 100; delay .1; spacefill 75; delay .1; spacefill 50; delay .1; spacefill 30; wireframe 30; delay .1; spacefill off; wireframe; delay 1; select cro; spacefill off; delay .5; spacefill; delay .5; spacefill off; delay .5; spacefill; delay .5; spacefill off; delay .5; spacefill; delay .5; spacefill off; delay .5; spacefill; delay .5; move -90 0 0 0 0 0 0 0 4; delay 1; set spin y 20; spin", "", false );
+              </script>
+                  use of dissolving and blinking to emphasize a moiety</font></p></td>
+              <td>select cro; spacefill off; delay .5; spacefill; delay .5; spacefill 
+                off; delay .5; spacefill; delay .5; spacefill off; delay .5; spacefill; 
+                delay .5; spacefill off; delay .5; spacefill; delay .5;</td>
+            </tr>
+            <tr> 
+              <td width="56%"><font face="Arial, Helvetica, sans-serif" size="2"> 
+                <script language="JavaScript" type="text/javascript">
+	jmolRadio('!quit; zap; load bdna2.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; moveto /* time, axisAngle */ 3.0 { -580 593 558 99.96} /* zoom, translation */  100.0 0.0 0.0  /* center, rotationRadius */ {15.559 19.973 9.841499} 27.31514 /* navigation center, translation, depth */ {0 0 0} 0 0 0 /* cameraDepth, cameraX, cameraY */  3.0 0.0 0.0; select all; color cpk; spacefill; select hoh; wireframe off; spacefill off;  delay 1; select dna; spacefill; wireframe 30; delay .1; spacefill 400; delay .1; spacefill 375; delay .1; spacefill 350; delay .1; spacefill 325; delay .1; spacefill 300; delay .1; spacefill 275; delay .1; spacefill 250; delay .1; spacefill 200; delay .1; spacefill 175; delay .1; spacefill 150; delay .1; spacefill 125; delay .1; spacefill 100; delay .1; spacefill 75; delay .1; spacefill 50; delay .1; spacefill 30; wireframe 30; delay .1; spacefill off; wireframe; delay 1; moveto /* time, axisAngle */ 4.0 { 181 -10 983 80.79} /* zoom, translation */  100.0 0.0 0.0  /* center, rotationRadius */ {15.559 19.973 9.841499} 27.31514 /* navigation center, translation, depth */ {0 0 0} 0 0 0 /* cameraDepth, cameraX, cameraY */  3.0 0.0 0.0; define bp 1:a,12:b; select bp; wireframe; delay .1; wireframe 10; delay .1; wireframe 20; delay .1; wireframe 30; delay .1; wireframe 40; delay .1; wireframe 50; spacefill 50; delay .1; spacefill 60; delay .1; spacefill 70; delay .1; spacefill 80; delay .1; spacefill 90; delay .1; spacefill 100; delay 1; select dna and not bp; wireframe off; select bp; hbonds 30; select hoh; color white; select bp; delay 1; hbonds off; delay 1; hbonds 30; delay 1; hbonds off; delay 1; hbonds 30; delay 1; hbonds off; delay 1; hbonds 30; delay 1; hbonds off; delay 1; hbonds 30; delay 1; hbonds off; delay 1; hbonds 30;', "", false );
+        </script>
+                a display using selection, define, several types of animation, 
+                dissolving and building, culminating in blinking hydrogen bonds 
+                between a base pair in double helical DNA - any part of the script 
+                to the right is easily copied and pasted into a custom script 
+                of the user's choice</font></td>
+              <td>load bdna2.pdb; set frank off; select all; hbonds off;select all; spin off; wireframe off; spacefill off; trace off; set ambient 40; set specpower 40; slab off; ribbons off; cartoons off; label off; monitor off; moveto /* time, axisAngle */ 3.0 { -580 593 558 99.96} /* zoom, translation */  100.0 0.0 0.0  /* center, rotationRadius */ {15.559 19.973 9.841499} 27.31514 /* navigation center, translation, depth */ {0 0 0} 0 0 0 /* cameraDepth, cameraX, cameraY */  3.0 0.0 0.0; select all; color cpk; spacefill; select hoh; wireframe off; spacefill off;  delay 1; select dna; spacefill; wireframe 30; delay .1; spacefill 400; delay .1; spacefill 375; delay .1; spacefill 350; delay .1; spacefill 325; delay .1; spacefill 300; delay .1; spacefill 275; delay .1; spacefill 250; delay .1; spacefill 200; delay .1; spacefill 175; delay .1; spacefill 150; delay .1; spacefill 125; delay .1; spacefill 100; delay .1; spacefill 75; delay .1; spacefill 50; delay .1; spacefill 30; wireframe 30; delay .1; spacefill off; wireframe; delay 1; moveto /* time, axisAngle */ 4.0 { 181 -10 983 80.79} /* zoom, translation */  100.0 0.0 0.0  /* center, rotationRadius */ {15.559 19.973 9.841499} 27.31514 /* navigation center, translation, depth */ {0 0 0} 0 0 0 /* cameraDepth, cameraX, cameraY */  3.0 0.0 0.0; define bp 1:a,12:b; select bp; wireframe; delay .1; wireframe 10; delay .1; wireframe 20; delay .1; wireframe 30; delay .1; wireframe 40; delay .1; wireframe 50; spacefill 50; delay .1; spacefill 60; delay .1; spacefill 70; delay .1; spacefill 80; delay .1; spacefill 90; delay .1; spacefill 100; delay 1; select dna and not bp; wireframe off; select bp; hbonds 30; select hoh; color white; select bp; delay 1; hbonds off; delay 1; hbonds 30; delay 1; hbonds off; delay 1; hbonds 30; delay 1; hbonds off; delay 1; hbonds 30; delay 1; hbonds off; delay 1; hbonds 30; delay 1; hbonds off; delay 1; hbonds 30;</td>
+            </tr>
+          </table>
+          <p align="center"><font face="Arial, Helvetica, sans-serif" size="4"><a href="#top" target="_self">return 
+            to beginning of exhibit</a></font> </p>
+          <p align="center"><font size="4" face="Arial, Helvetica, sans-serif"><a href="#intro"><font color="#0000FF" size="1">[Introduction]</font></a><font color="#0000FF" size="1"> 
+            <a href="#II">[II. Display]</a> <a href="#iii" target="_self">[III. 
+            Loading and Positioning]</a> <a href="#IV">[IV. Selecting and Labeling]</a> 
+            <a href="#V"><br />
+            [V. Coloring and Schemes]</a> <a href="#VI">[VI. Illustrating Bonds]</a> 
+            <a href="#VII">[VII. Animation]</a> </font></font></p>
+          <p align="center"><a href="../exhibits.htm" target="_parent">Back to 
+            OMM Exhibits</a></p>
+          <hr /> 
+          <font color="#9900FF" size="3" face="Arial, Helvetica, sans-serif"><strong>Note: 
+          if this tutorial is helpful in the creation of your own webpages, please 
+          explicitly acknowledge your use of this page (URL, Author, and a link to this page) in your webpage/s. And please drop an email 
+          to <a href="mailto:marcey@clunet.edu">marcey@clunet.edu</a> with a link 
+          to your page/s. This helps with funding opportunities for the OMM and 
+          helps ensure continued development of this resource. Thanks!</strong></font> 
+          <hr /> <p>&nbsp;</p>
+          <!--WEBBOT bot="HTMLMarkup" startspan ALT="Site Meter" -->
+          <script type="text/javascript" language="JavaScript">var site="s20scripting"</script> 
+          <script type="text/javascript" language="JavaScript1.2" src="http://s20.sitemeter.com/js/counter.js?site=s20scripting">
+        </script> <p> 
+            <noscript>
+            <a href="http://s20.sitemeter.com/stats.asp?site=s20scripting" target="_top"> 
+            <img src="http://s20.sitemeter.com/meter.asp?site=s20scripting" alt="Site Meter" border="0"/></a> 
+            </noscript>
+            <!-- Copyright (c)2005 Site Meter -->
+            <!--WEBBOT bot="HTMLMarkup" Endspan -->
+          </p>
+          <p>&nbsp;</p></td>
+        </tr>
+      </table>
+      <hr /> <p><span class="style1">Acknowledgement: The format of this web page is modified from a template provided by Dr. Angel Herraez, Bioquimica y Biologia Molecular, Universidad de Alcala, 
+E-28871, Alcala de Henares (Madrid), Spain.</span><br>
+
+  </div> <!--content-->
+</div> <!--mainPane-->
+</body>
+</html>
+
